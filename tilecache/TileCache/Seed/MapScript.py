@@ -1,4 +1,5 @@
 import mapscript
+from TileCache.Layer import MetaTile
 
 def valid_extent(rectObj):
     """ return whatever 'rectObj' represents a valid extent """
@@ -41,5 +42,28 @@ def getLayersByName(mapObj, name):
             layers.append(layer)
     return layers
 
+def getCell():
+    raise NotImplementedError('move to Layer')
+
+def grid(tcLayer, extent):
+    """ yield all the tiles indexes (x, y, z) for the given extent and for all the layer resolutions """
+    for z in range(tcLayer.resolutions):
+        xbuffer, ybuffer = tcLayer.getMetaBufferSize(z)
+        minx, miny = getCell(tcLayer, bbox.minx - xbuffer, bbox.miny - ybuffer, z)
+        maxx, maxy = getCell(tcLayer, bbox.maxx + xbuffer, bbox.maxy + ybuffer, z)
+        for x in range(minx, maxx + 1):
+            for y in range(miny, maxy + 1):
+                yield x, y, z
+
+def tiles(layersObj, tcLayer):
+    """ yield all non empty tiles indexes (x, y, z) """
+    done = set()
+    for layerObj in layersObj:
+        for shape in shapes(layerObj):
+            for x, y, z in grid(tcLayer, shape.bounds):
+                tile = MetaTile(tcLayer, x, y, z)
+                if intersects(shape, tile.bounds()):
+                    done.add((x, y, z))
+                    yield x, y, z
 
 
