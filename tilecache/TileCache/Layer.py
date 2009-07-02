@@ -290,6 +290,28 @@ class Layer (object):
         
         return (x, y, z)
 
+    def getExactCell(self, x, y, z):
+        """
+        Return the cell index exactly under the x and y coordinates at the given zoom level.
+        If the coordinates are outside the layer extent, the closest cell is returned
+        (the first or last cell index)
+        """
+        res = self.resolutions[z]
+        px = (x - self.bbox[0]) / res
+        py = (y - self.bbox[1]) / res
+
+        xindex = int(px) / self.size[0]
+        yindex = int(py) / self.size[1]
+
+        maxx, maxy = tuple([ceil(m) for m in self.grid(z)])
+        if xindex < 0: xindex = 0
+        elif xindex > maxx: xindex = maxx
+
+        if yindex < 0: yindex = 0
+        elif yindex > maxy: yindex = maxy
+            
+        return xindex, yindex
+
     def getClosestCell (self, z, (minx, miny)):
         """
         >>> l = Layer("name")
