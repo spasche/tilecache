@@ -22,7 +22,7 @@ def seed(service, layer, skip_empty=True, levels=None, bbox=None, padding=0, for
         for x, y, z in tiles(layersObj, layer):
             start = time.time()
             tile = Tile(layer, x, y, z)
-            service.renderTile(tile, force=force) # FIXME: check this
+            service.renderTile(tile, force=force)
             print "['%s'] (x: %04d, y: %04d, z: %04d) in %4fs"%(layer.name, x, y, z, time.time() - start))
             
     else:

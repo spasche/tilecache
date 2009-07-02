@@ -42,15 +42,12 @@ def getLayersByName(mapObj, name):
             layers.append(layer)
     return layers
 
-def getCell():
-    raise NotImplementedError('move to Layer')
-
 def grid(tcLayer, extent):
     """ yield all the tiles indexes (x, y, z) for the given extent and for all the layer resolutions """
     for z in range(tcLayer.resolutions):
         xbuffer, ybuffer = tcLayer.getMetaBufferSize(z)
-        minx, miny = getCell(tcLayer, bbox.minx - xbuffer, bbox.miny - ybuffer, z)
-        maxx, maxy = getCell(tcLayer, bbox.maxx + xbuffer, bbox.maxy + ybuffer, z)
+        minx, miny = tcLayer.getExactCell(bbox.minx - xbuffer, bbox.miny - ybuffer, z)
+        maxx, maxy = tcLayer.getExactCell(bbox.maxx + xbuffer, bbox.maxy + ybuffer, z)
         for x in range(minx, maxx + 1):
             for y in range(miny, maxy + 1):
                 yield x, y, z
