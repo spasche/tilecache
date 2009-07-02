@@ -13,8 +13,9 @@ class MapServer(MetaLayer):
         MetaLayer.__init__(self, name, **kwargs) 
         self.mapfile = mapfile
         self.styles = styles
+        self.map = self.get_map()
 
-    def get_map(self, tile):
+    def get_map(self, tile=None):
         # tile is unused here but might be used in a subclass
         # where the mapfile config depends on the tile extents or layer
         import mapscript
@@ -45,9 +46,13 @@ class MapServer(MetaLayer):
         return req
 
     def renderTile(self, tile):
-        wms = self.get_map(tile)
         req = self.get_request(tile)
-        wms.loadOWSParameters(req)
-        mapImage = wms.draw()
+        self.map.loadOWSParameters(req)
+        mapImage = self.map.draw()
         tile.data = mapImage.getBytes()
+
+        # FIXME: bug with mapscript:
+        # if the image is in palette mode
+        # mapImage.getBytes() != mapImage.save()
+        
         return tile.data 
