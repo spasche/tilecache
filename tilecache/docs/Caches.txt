@@ -67,25 +67,9 @@ Use bucket_name if you need to name your bucket. If the property is left over,
 TileCache will generate a name based on your access key.
 This name cannot contain upper-case characters.
 
-This cache can use one of two libraries:
+This cache uses the boto libraries available from
+http://code.google.com/p/boto/, boto is a package that wraps the Amazon APIs in
+a Pythonic wrapper. This is installable on recent Debian-based distributions as
+python-boto. It can be installed via easy_install from setuptools as well:
+simply easy_install boto.
 
-Boto
-____
-Available from http://code.google.com/p/boto/, boto is a package that 
-wraps the Amazon APIs in a Pythonic wrapper. This is installable on
-recent Debian-based distributions as python-boto. It can be installed
-via easy_install from setuptools as well: simply easy_install boto.
-The boto library is more complete, and is more likely to properly
-handle error conditions than the Amazon Example Library.
-
-Amazon Example Library
-______________________
-Amazon provides an example Python library. This library provides a simple
-wrapper around the Amazon web services. The code is available from 
-http://developer.amazonwebservices.com/connect/entry.jspa?externalID=134&categoryID=47
-
-You must download, unpack, and place the s3-example-libraries/python/S3.py
-file on your PYTHONPATH/sys.path. The source distribution of TileCache
-includes this file in the TileCache/Caches/S3.py file. (Packagers are
-encouraged to remove this file from distributions and instead depend
-on the boto library described above.)

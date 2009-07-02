@@ -1,24 +1,10 @@
 # BSD Licensed, Copyright (c) 2006-2008 MetaCarta, Inc.
 from TileCache.Cache import Cache
 import time
+from boto import s3
 
 class AWSS3(Cache):
-    import_error = "Problem importing S3 support library. You must have either boto or the Amazon S3 library.\nErrors:\n * %s"
     def __init__ (self, access_key, secret_access_key, bucket_name=None, use_tms_paths = "False", **kwargs):
-        self.module = None
-        try:
-            import boto.s3
-            self.s3 = boto.s3
-            self.module = "boto"
-        except ImportError, E:
-            exceptions = [str(E)]
-            try:
-                import S3
-                self.s3 = S3
-                self.module = "amazon"
-            except Exception, E:
-                exceptions.append(str(E))
-                raise Exception(self.import_error % ('\n * '.join(exceptions)))
         Cache.__init__(self, **kwargs)
         self.bucket_name = bucket_name or "%s-tilecache" % access_key.lower() 
         if use_tms_paths.lower() in ("true", "yes", "1"):
@@ -26,11 +12,10 @@ class AWSS3(Cache):
         elif use_tms_paths.lower() == "flipped":
             use_tms_paths = "google"
         self.use_tms_paths = use_tms_paths
-        if self.module == "amazon":
-            self.cache = self.s3.AWSAuthConnection(access_key, secret_access_key)
-            self.cache.create_bucket(self.bucket_name)
-        else:
-            self.cache = self.s3.connection.S3Connection(access_key, secret_access_key)
+
+        self.cache = self.s3.connection.S3Connection(access_key, secret_access_key)
+        self.bucket = self.cache.lookup(self.bucket_name)
+        if not self.bucket:
             self.bucket = self.cache.create_bucket(self.bucket_name)
     
     def getBotoKey(self, key):
@@ -57,41 +42,32 @@ class AWSS3(Cache):
         return tile.data
     
     def getObject(self, key):
-        data = None
-        if self.module == "amazon":
-            response = self.cache.get(self.bucket_name, key)
-            if not response.object.data.startswith("<?xml"):
-                data = response.object.data
-        else:
-            try:
-                data = self.getBotoKey(key).get_contents_as_string()
-            except:
-                pass
-            self.bucket.connection.connection.close()    
+        try:
+            data = self.getBotoKey(key).get_contents_as_string()
+        except:
+            data = None
+        self.bucket.connection.connection.close()    
         return data
         
     def set(self, tile, data):
-        if self.readonly: return data
-        key = self.getKey(tile)
-        self.setObject(key, data)
-        return data
+        if self.readonly:
+            return data
+        else:
+            key = self.getKey(tile)
+            self.setObject(key, data)
+            return data
     
     def setObject(self, key, data):
-        if self.module == "amazon":
-            self.cache.put(self.bucket_name, key, self.s3.S3Object(data))
-        else:
-            self.getBotoKey(key).set_contents_from_string(data)
-            self.bucket.connection.connection.close()    
+        self.getBotoKey(key).set_contents_from_string(data)
+        self.bucket.connection.connection.close()    
     
     def delete(self, tile):
-        key = self.getKey(tile)
-        self.deleteObject(key) 
+        if not self.readonly:
+            key = self.getKey(tile)
+            self.deleteObject(key)
     
     def deleteObject(self, key):
-        if self.module == "amazon":
-            self.cache.delete(self.bucket_name, key)
-        else: 
-            self.getBotoKey(key).delete()
+        self.getBotoKey(key).delete()
             
     def getLockName (self, tile):
         return "lock-%s" % self.getKey(tile)
@@ -106,19 +82,11 @@ class AWSS3(Cache):
         self.deleteObject( self.getLockName(tile) )
     
     def keys (self, options = {}):
-        if self.module == "amazon":
-            return map(lambda x: x.key, 
-                self.cache.list_bucket(self.bucket_name, options).entries)
-        else:
-            prefix = "" 
-            if options.has_key('prefix'):
-                prefix = options['prefix']
-            response = self.bucket.list(prefix=prefix)
-            keys = []
-            for key in response:
-                keys.append(key.key)
-            return keys
-            
+        prefix = "" 
+        if options.has_key('prefix'):
+            prefix = options['prefix']
+        response = self.bucket.list(prefix=prefix)
+        return [k.key for k in response]
 
 if __name__ == "__main__":
     import sys
