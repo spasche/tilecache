@@ -384,6 +384,14 @@ class MetaLayer (Layer):
         return ( min(self.metaSize[0], int(maxcol + 1)), 
                  min(self.metaSize[1], int(maxrow + 1)) )
 
+    def getMetaBufferSize (self, z):
+        """ return the metabuffer size for a resolution index """
+        if not self.metaTile:
+            return (0, 0)
+        else:
+            return self.resolutions[z] * float(self.metaBuffer[0]), \
+                   self.resolutions[z] * float(self.metaBuffer[1])
+
     def getMetaTile (self, tile):
         x = int(tile.x / self.metaSize[0])
         y = int(tile.y / self.metaSize[1])
