@@ -118,8 +118,8 @@ def seed (svc, layer, levels = (0, 5), bbox = None, padding = 0, force = False, 
                 total += 1
                 zcount += 1
                 box = "(%.4f %.4f %.4f %.4f)" % bounds
-                print "%02d (%06d, %06d) = %s [%.4fs : %.3f/s] %s/%s" \
-                     % (z,x,y, box, time.time() - tileStart, total / (time.time() - start + .0001), zcount, ztiles)
+                print "[%s] %02d (%06d, %06d) = %s [%.4fs : %.3f/s] %s/%s" \
+                     % (layer.name, z,x,y, box, time.time() - tileStart, total / (time.time() - start + .0001), zcount, ztiles)
 
 def main ():
     if not OptionParser:
