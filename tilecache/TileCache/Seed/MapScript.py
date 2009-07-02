@@ -1,6 +1,6 @@
 import mapscript
 
-def valid_rectObj(rectObj):
+def valid_extent(rectObj):
     """ return whatever 'rectObj' represents a valid extent """
     return rectObj.minx != -1 and rectObj.miny != -1 and \
            rectObj.maxx != -1 and rectObj.maxy != -1
