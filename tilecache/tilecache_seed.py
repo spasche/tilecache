@@ -4,6 +4,9 @@
 """This is intended to be run as a command line tool. See the accompanying
    README file or man page for details."""
 
+import sys
+from optparse import OptionParser
+
 from TileCache.Client import seed
 from TileCache.Service import Service, cfgfiles
 from TileCache.Layer import Layer
