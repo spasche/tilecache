@@ -49,6 +49,7 @@ Example configuration::
   type=AWSS3
   access_key=833833ABC88838
   secret_access_key=8234abyi3kdjby8so8idu
+  bucket_name=mybucketname
   use_tms_paths=true
 
 The use_tms_paths will make the files more accessible to other clients,
@@ -61,6 +62,10 @@ The use_tms_paths can also be set to "flipped": if so, it will result in
   /1.0.0/9/82/63.png
 
 But with 0 starting at the top of the map, instead of the bottom. 
+
+Use bucket_name if you need to name your bucket. If the property is left over,
+TileCache will generate a name based on your access key.
+This name cannot contain upper-case characters.
 
 This cache can use one of two libraries:
 

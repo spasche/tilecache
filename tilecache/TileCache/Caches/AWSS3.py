@@ -4,7 +4,7 @@ import time
 
 class AWSS3(Cache):
     import_error = "Problem importing S3 support library. You must have either boto or the Amazon S3 library.\nErrors:\n * %s"
-    def __init__ (self, access_key, secret_access_key, use_tms_paths = "False", **kwargs):
+    def __init__ (self, access_key, secret_access_key, bucket_name=None, use_tms_paths = "False", **kwargs):
         self.module = None
         try:
             import boto.s3
@@ -20,7 +20,7 @@ class AWSS3(Cache):
                 exceptions.append(str(E))
                 raise Exception(self.import_error % ('\n * '.join(exceptions)))
         Cache.__init__(self, **kwargs)
-        self.bucket_name = "%s-tilecache" % access_key.lower() 
+        self.bucket_name = bucket_name or "%s-tilecache" % access_key.lower() 
         if use_tms_paths.lower() in ("true", "yes", "1"):
             use_tms_paths = True
         elif use_tms_paths.lower() == "flipped":
