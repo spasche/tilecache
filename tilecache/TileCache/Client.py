@@ -4,10 +4,7 @@
 
 import sys, urllib, urllib2, time, os, math
 import httplib
-try:
-    from optparse import OptionParser
-except ImportError:
-    OptionParser = False 
+from optparse import OptionParser
 
 # setting this to True will exchange more useful error messages
 # for privacy, hiding URLs and error messages.
@@ -122,8 +119,6 @@ def seed (svc, layer, levels = (0, 5), bbox = None, padding = 0, force = False, 
                      % (layer.name, z,x,y, box, time.time() - tileStart, total / (time.time() - start + .0001), zcount, ztiles)
 
 def main ():
-    if not OptionParser:
-        raise Exception("TileCache seeding requires optparse/OptionParser. Your Python may be too old.\nSend email to the mailing list \n(http://openlayers.org/mailman/listinfo/tilecache) about this problem for help.")
     usage = "usage: %prog <layer> [<zoom start> <zoom stop>]"
     
     parser = OptionParser(usage=usage, version="%prog $Id$")
