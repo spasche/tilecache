@@ -132,11 +132,15 @@ class Service (object):
 
         layer = tile.layer
         image = None
-        if not force: image = self.cache.get(tile)
+        if not force:
+            image = self.cache.get(tile)
         if not image:
             data = layer.render(tile, force=force)
-            if (data): image = self.cache.set(tile, data)
-            else: raise Exception("Zero length data returned from layer.")
+            if data:
+                image = self.cache.set(tile, data)
+            else:
+                raise Exception("Zero length data returned from layer.")
+            
             if layer.debug:
                 sys.stderr.write(
                 "Cache miss: %s, Tile: x: %s, y: %s, z: %s, time: %s\n" % (
