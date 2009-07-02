@@ -126,7 +126,6 @@ class Service (object):
         return ('text/xml', "\n".join(xml))       
 
     def renderTile (self, tile, force = False):
-        from warnings import warn
         start = time.time()
 
         # do more cache checking here: SRS, width, height, layers 
