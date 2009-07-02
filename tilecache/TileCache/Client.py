@@ -4,7 +4,6 @@
 
 import sys, urllib, urllib2, time, os, math
 import httplib
-from optparse import OptionParser
 
 # setting this to True will exchange more useful error messages
 # for privacy, hiding URLs and error messages.
