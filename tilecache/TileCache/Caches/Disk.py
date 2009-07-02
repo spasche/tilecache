@@ -91,10 +91,11 @@ class Disk (Cache):
         tile.data = data
         return data
     
-    def delete (self, tile):
-        filename = self.getKey(tile)
-        if self.access(filename, 'read'):
-            os.unlink(filename)
+    def delete (self, tile):                
+        if not self.readonly:
+            filename = self.getKey(tile)
+            if self.access(filename, 'read'):
+                os.unlink(filename)
             
     def attemptLock (self, tile):
         name = self.getLockName(tile)

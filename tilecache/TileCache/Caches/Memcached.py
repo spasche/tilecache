@@ -19,14 +19,17 @@ class Memcached(Cache):
         return tile.data
     
     def set(self, tile, data):
-        if self.readonly: return data
-        key = self.getKey(tile)
-        self.cache.set(key, data)
-        return data
+        if self.readonly:
+            return data
+        else:
+            key = self.getKey(tile)
+            self.cache.set(key, data)
+            return data
     
     def delete(self, tile):
-        key = self.getKey(tile)
-        self.cache.delete(key)
+        if not self.readonly:
+            key = self.getKey(tile)
+            self.cache.delete(key)
 
     def attemptLock (self, tile):
         return self.cache.add( self.getLockName(tile), "0", 
