@@ -6,7 +6,10 @@ class Cache (object):
     def __init__ (self, timeout = 30.0, stale_interval = 300.0, readonly = False, **kwargs):
         self.stale    = float(stale_interval)
         self.timeout = float(timeout)
-        self.readonly = readonly
+        if isinstance(readonly, str):
+            self.readonly = readonly.lower() in ["yes", "y", "t", "true"]
+        else:
+            self.readonly = readonly
                 
     def lock (self, tile, blocking = True):
         start_time = time.time()
