@@ -34,8 +34,8 @@ def seed(service, layer, skip_empty=True, levels=None, bbox=None, padding=0, for
 
     else:
         for z in range(*levels):
-            minx, miny = layer.getClosestCell(z, bbox[0:2])
-            maxx, maxy = layer.getClosestCell(z, bbox[2:4])
+            minx, miny, _ = layer.getClosestCell(z, bbox[0:2])
+            maxx, maxy, _ = layer.getClosestCell(z, bbox[2:4])
             metax, metay = layer.getMetaSize(z)
 
             startx = minx - (1 * padding)
