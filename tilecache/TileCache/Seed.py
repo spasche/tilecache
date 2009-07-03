@@ -8,7 +8,7 @@ def seed(service, layer, levels=None, bbox=None, skip_empty=True, padding=0, for
         levels = (0, len(layer.resolutions))
     else:
         levels[0] = max(0, levels[0])
-        levels[0] = min(len(layer.resolutions), levels[1])
+        levels[1] = min(len(layer.resolutions), levels[1])
         
     if not bbox:
         bbox = layer.bbox
