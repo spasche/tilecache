@@ -1,7 +1,7 @@
 # BSD Licensed, Copyright (c) 2006-2008 MetaCarta, Inc.
 
-import os, sys
-from warnings import warn
+import sys
+from math import ceil
 from Client import WMS
 from Service import TileCacheException
 
