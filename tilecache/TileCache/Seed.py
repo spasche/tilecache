@@ -27,7 +27,7 @@ def seed(service, layer, skip_empty=True, levels=None, bbox=None, padding=0, for
 
     if skip_empty:
         # metaSize, reverse, padding not managed
-        for x, y, z in tiles(layersObj, layer):
+        for x, y, z in tiles(layersObj, layer, bbox, levels):
             start = time.time()
             tile = Tile(layer, x, y, z)
             service.renderTile(tile, force=force)

@@ -27,7 +27,8 @@ if __name__ == "__main__":
     parser.add_option("-r","--reverse", action="store_true", dest="reverse", default = False,
                       help="Reverse order of seeding tiles")
     parser.add_option("--skip_empty", action="store_true", dest="skip_empty", default = False,
-                      help="Don't generate empty tiles: the layer must be a mapserver and a vector layer")
+                      help="Don't generate empty tiles: the layer must be a mapserver and a vector layer "+
+                      "Default is true.")
 
     (options, args) = parser.parse_args()
 
