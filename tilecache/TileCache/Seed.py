@@ -1,6 +1,7 @@
 import mapscript
 import time
-from Utils.MapScript import getLayersByName, tiles
+from TileCache.Utils.MapScript import getLayersByName, tiles
+from TileCache.Layer import Tile
 
 def seed(service, layer, skip_empty=True, levels=None, bbox=None, padding=0, force=False, reverse=False):
     if not levels:
