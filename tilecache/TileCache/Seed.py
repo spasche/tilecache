@@ -3,7 +3,7 @@ import time
 from TileCache.Utils.MapScript import getLayersByName, tiles
 from TileCache.Layer import Tile
 
-def seed(service, layer, skip_empty=True, levels=None, bbox=None, padding=0, force=False, reverse=False):
+def seed(service, layer, levels=None, bbox=None, skip_empty=True, padding=0, force=False, reverse=False):
     if not levels:
         levels = (0, len(layer.resolutions))
 

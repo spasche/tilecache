@@ -44,10 +44,14 @@ if __name__ == "__main__":
         bboxlist=None
 
     if len(args) > 1:
-        seed(svc, layer, map(int, args[1:3]), bboxlist , padding=options.padding, force = options.force, reverse = options.reverse)
+        seed(svc, layer, levels=map(int, args[1:3]), bbox=bboxlist,
+             skip_empty=options.skip_empty, padding=options.padding,
+             force = options.force, reverse = options.reverse)
     else:
         for line in sys.stdin.readlines():
             lat, lon, delta = map(float, line.split(","))
             bbox = (lon - delta, lat - delta, lon + delta, lat + delta)
             print "===> %s <===" % (bbox,)
-            seed(svc, layer, (5, 17), bbox , force = options.force )
+            seed(svc, layer, bbox=bbox,
+                 skip_empty=options.skip_empty, padding=options.padding,
+                 force = options.force, reverse = options.reverse)

@@ -8,6 +8,10 @@ def valid_extent(rectObj):
 
 def shapes(layerObj, extent=None):
     """ return all the shapes from 'layerObj' inside 'extent' """
+    # convert the extent to a rectObj if needed
+    if extent is not None and not isinstance(extent, mapscript.rectObj):
+        extent = mapscript.rectObj(*extent)
+    
     if extent is None or not valid_extent(extent):
         if valid_extent(layerObj.extent):
             extent = layerObj.extent
