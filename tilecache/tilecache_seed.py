@@ -7,7 +7,7 @@
 import sys
 from optparse import OptionParser
 
-from TileCache.Client import seed
+from TileCache.Seed import seed
 from TileCache.Service import Service, cfgfiles
 from TileCache.Layer import Layer
 
