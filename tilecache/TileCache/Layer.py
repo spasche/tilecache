@@ -312,6 +312,21 @@ class Layer (object):
             
         return xindex, yindex
 
+    def range(self, bbox=None, levels=None):
+        if not bbox:
+            bbox = self.bbox
+
+        if not levels:
+            levels = (0, len(self.resolutions))
+
+        for z in range(*levels):
+            xbuffer, ybuffer = self.getMetaBufferSize(z)
+            minx, miny = self.getExactCell(bbox.minx - xbuffer, bbox.miny - ybuffer, z)
+            maxx, maxy = self.getExactCell(bbox.maxx + xbuffer, bbox.maxy + ybuffer, z)
+            for x in range(minx, maxx + 1):
+                for y in range(miny, maxy + 1):
+                    yield x, y, z
+
     def getClosestCell (self, z, (minx, miny)):
         """
         >>> l = Layer("name")

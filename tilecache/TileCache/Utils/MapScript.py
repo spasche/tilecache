@@ -46,29 +46,12 @@ def getLayersByName(mapObj, name):
             layers.append(layer)
     return layers
 
-# FIXME: move this into the TileCache.Layer class
-def grid(tcLayer, bbox=None, levels=None):
-    """ yield all the tiles indexes (x, y, z) for the given extent and levels range """
-    if not levels:
-        levels = (0, len(tcLayer.resolutions))
-
-    if not bbox:
-        bbox = tcLayer.bbox
-
-    for z in range(*levels):
-        xbuffer, ybuffer = tcLayer.getMetaBufferSize(z)
-        minx, miny = tcLayer.getExactCell(bbox.minx - xbuffer, bbox.miny - ybuffer, z)
-        maxx, maxy = tcLayer.getExactCell(bbox.maxx + xbuffer, bbox.maxy + ybuffer, z)
-        for x in range(minx, maxx + 1):
-            for y in range(miny, maxy + 1):
-                yield x, y, z
-
 def tiles(layersObj, tcLayer, bbox=None, levels=None):
     """ yield all non empty tiles indexes (x, y, z) """
     done = set()
     for layerObj in layersObj:
         for shape in shapes(layerObj, bbox):
-            for x, y, z in grid(tcLayer, shape.bounds, levels):
+            for x, y, z in tcLayer.range(shape.bounds, levels):
                 tile = MetaTile(tcLayer, x, y, z)
                 if intersects(shape, tile.bounds()):
                     done.add((x, y, z))
