@@ -1,7 +1,7 @@
 # BSD Licensed, Copyright (c) 2006-2008 MetaCarta, Inc.
 
-from TileCache.Cache import Cache
 import time
+from TileCache.Cache import Cache
 
 class Memcached(Cache):
     def __init__ (self, servers = ['127.0.0.1:11211'], **kwargs):

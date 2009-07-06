@@ -1,7 +1,8 @@
 # BSD Licensed, Copyright (c) 2006-2008 MetaCarta, Inc.
-from TileCache.Cache import Cache
+
 import time
 from boto import s3
+from TileCache.Cache import Cache
 
 class AWSS3(Cache):
     def __init__ (self, access_key, secret_access_key, bucket_name=None, use_tms_paths = "False", **kwargs):

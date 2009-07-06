@@ -20,11 +20,8 @@ case.)
 >>> c.getKey(t)
 '/tmp/tilecache/test/12/14/4077.png'
 """
-
-from TileCache.Cache import Cache
-from TileCache.Caches.Disk import Disk
-
 import os
+from TileCache.Caches.Disk import Disk
 
 class GoogleDisk(Disk):
     def getKey (self, tile):

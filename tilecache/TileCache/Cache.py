@@ -1,6 +1,5 @@
 # BSD Licensed, Copyright (c) 2006-2008 MetaCarta, Inc.
-import os, sys, time
-from warnings import warn
+import time
 
 class Cache (object):
     def __init__ (self, timeout = 30.0, stale_interval = 300.0, readonly = False, **kwargs):
