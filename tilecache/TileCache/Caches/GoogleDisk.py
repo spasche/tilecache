@@ -20,21 +20,21 @@ case.)
 >>> c.getKey(t)
 '/tmp/tilecache/test/12/14/4077.png'
 """
-import os
 from TileCache.Caches.Disk import Disk
 
 class GoogleDisk(Disk):
-    def getKey (self, tile):
-        grid = tile.layer.grid(tile.z) 
-        components = ( self.basedir,
-                       tile.layer.name,
-                       "%s" % int(tile.z),
-                       "%s" % int(tile.x),
-                       "%s.%s" % (int(grid[1] - 1 - tile.y), tile.layer.extension)
-                       )
-        filename = os.path.join( *components )
-        return filename
+    default_structure = 'google'
 
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+    def __init__ (self, **kwargs):
+        Disk.__init__(self, **kwargs)
+        # deprecated waring: use type=Disk and structure=google
+
+#         grid = tile.layer.grid(tile.z)
+#         components = ( self.basedir,
+#                        tile.layer.name,
+#                        "%s" % int(tile.z),
+#                        "%s" % int(tile.x),
+#                        "%s.%s" % (int(grid[1] - 1 - tile.y), tile.layer.extension)
+#                        )
+#         filename = os.path.join( *components )
+#         return filename

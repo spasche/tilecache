@@ -1,10 +1,17 @@
 # BSD Licensed, Copyright (c) 2006-2008 MetaCarta, Inc.
 import time
+import os
 
 class Cache (object):
-    def __init__ (self, timeout = 30.0, stale_interval = 300.0, readonly = False, **kwargs):
-        self.stale    = float(stale_interval)
+    def __init__ (self, timeout = 30.0, stale_interval = 300.0, readonly = False, structure=None, **kwargs):
+        self.stale = float(stale_interval)
         self.timeout = float(timeout)
+
+        if structure is None:
+            self.structure = self.default_structure
+        else:
+            self.structure = structure
+            
         if isinstance(readonly, str):
             self.readonly = readonly.lower() in ["yes", "y", "t", "true"]
         else:
@@ -28,7 +35,41 @@ class Cache (object):
         return self.getKey(tile) + ".lck"
 
     def getKey (self, tile):
-        raise NotImplementedError()
+        if self.structure == 'disk':
+            return os.path.join(self.basedir,
+                                tile.layer.name,
+                                "%02d" % int(tile.z),
+                                "%03d" % int(tile.x / 1000000),
+                                "%03d" % (int(tile.x / 1000) % 1000),
+                                "%03d" % (int(tile.x) % 1000),
+                                "%03d" % int(tile.y / 1000000),
+                                "%03d" % (int(tile.y / 1000) % 1000),
+                                "%03d.%s" % (int(tile.y) % 1000, tile.layer.extension))
+
+        elif self.structure == 'tms':
+            width, _ = tile.layer.grid(tile.z)
+            return os.path.join("1.0.0",
+                                tile.layer.name,
+                                "%s" % int(tile.z),
+                                "%s" % int(tile.x),
+                                "%s.%s" % (tile.y, tile.layer.extension))
+        elif self.structure == 'flipped-tms':
+            raise NotImplementedError() # todo
+        elif self.structure == 'google':
+            width, _ = tile.layer.grid(tile.z)
+            return os.path.join(self.basedir,
+                                tile.layer.name,
+                                "%s" % int(tile.z),
+                                "%s" % int(tile.x),
+                                "%s.%s" % (int(grid[1] - 1 - tile.y), tile.layer.extension))        
+
+        elif self.structure == 's3':
+            return "-".join(map(str, [tile.layer.name, tile.z , tile.x, tile.y]))
+    
+        elif self.structure == 'memcached':
+            return "/".join(map(str, [tile.layer.name, tile.x, tile.y, tile.z]))
+        else:
+            raise NotImplementedError()
 
     def attemptLock (self, tile):
         raise NotImplementedError()
