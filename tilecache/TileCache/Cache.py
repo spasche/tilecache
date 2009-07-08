@@ -35,6 +35,7 @@ class Cache (object):
     def getLockName (self, tile):
         return self.getKey(tile) + ".lck"
 
+    # FIXME: create separate functions (disk, tms, ...) and move away from the class
     def getKey (self, tile):
         if self.structure == 'disk':
             return os.path.join(tile.layer.name,

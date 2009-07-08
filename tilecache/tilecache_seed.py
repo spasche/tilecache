@@ -58,3 +58,9 @@ def main():
 
 if __name__ == "__main__":
     main()
+#     # see http://docs.python.org/library/profile.html
+#     import cProfile
+#     import pstats
+#     cProfile.run('main()', 'seed')
+#     p = pstats.Stats('seed')
+#     p.strip_dirs().sort_stats('time').print_stats(20)
