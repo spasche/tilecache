@@ -20,21 +20,13 @@ case.)
 >>> c.getKey(t)
 '/tmp/tilecache/test/12/14/4077.png'
 """
+import warnings
 from TileCache.Caches.Disk import Disk
 
 class GoogleDisk(Disk):
+
     default_structure = 'google'
 
     def __init__ (self, **kwargs):
         Disk.__init__(self, **kwargs)
-        # deprecated waring: use type=Disk and structure=google
-
-#         grid = tile.layer.grid(tile.z)
-#         components = ( self.basedir,
-#                        tile.layer.name,
-#                        "%s" % int(tile.z),
-#                        "%s" % int(tile.x),
-#                        "%s.%s" % (int(grid[1] - 1 - tile.y), tile.layer.extension)
-#                        )
-#         filename = os.path.join( *components )
-#         return filename
+        warnings.warn("GoogleDisk type is deprecated. use a Disk cache and set the structure to google", DeprecationWarning)

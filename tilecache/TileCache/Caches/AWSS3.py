@@ -9,15 +9,8 @@ class AWSS3(Cache):
     default_structure = 's3'
     
     def __init__ (self, access_key, secret_access_key, bucket_name=None, **kwargs):
-#    def __init__ (self, access_key, secret_access_key, bucket_name=None, use_tms_paths = "False", **kwargs):
         Cache.__init__(self, **kwargs)
         self.bucket_name = bucket_name or "%s-tilecache" % access_key.lower() 
-#         if use_tms_paths.lower() in ("true", "yes", "1"):
-#             use_tms_paths = True
-#         elif use_tms_paths.lower() == "flipped":
-#             use_tms_paths = "google"
-#         self.use_tms_paths = use_tms_paths
-
         self.cache = self.s3.connection.S3Connection(access_key, secret_access_key)
         self.bucket = self.cache.lookup(self.bucket_name)
         if not self.bucket:
@@ -27,19 +20,6 @@ class AWSS3(Cache):
         boto_key = self.s3.key.Key(self.bucket)
         boto_key.key = key
         return boto_key
-    
-#     def getKey(self, tile):
-#         if self.use_tms_paths == True or self.use_tms_paths == "flipped":
-#             grid = tile.layer.grid(tile.z) 
-#             y = tile.y
-#             if self.use_tms_paths == "flipped":
-#                 y = int(grid[1] - 1 - tile.y)
-#             version = "1.0.0"
-#             path = "/".join(map(str, [version, tile.layer.name, tile.z, tile.x, y]))
-#             path = ".".join(map(str, [path, tile.layer.extension]))
-#         else: 
-#            path = "-".join(map(str, [tile.layer.name, tile.z , tile.x, tile.y]))
-#         return path
 
     def get(self, tile):
         key = self.getKey(tile)

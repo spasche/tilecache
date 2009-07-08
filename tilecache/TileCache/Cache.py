@@ -8,9 +8,10 @@ class Cache (object):
         self.timeout = float(timeout)
 
         if structure is None:
+            # default_structure is defined is child classes
             self.structure = self.default_structure
         else:
-            self.structure = structure
+            self.structure = structure.lower()
             
         if isinstance(readonly, str):
             self.readonly = readonly.lower() in ["yes", "y", "t", "true"]
@@ -47,21 +48,27 @@ class Cache (object):
                                 "%03d.%s" % (int(tile.y) % 1000, tile.layer.extension))
 
         elif self.structure == 'tms':
+            return os.path.join("1.0.0",
+                                tile.layer.name,
+                                "%s" % int(tile.z),
+                                "%s" % int(tile.x),
+                                "%s.%s" % (int(width - 1 - tile.y), tile.layer.extension))
+        
+        elif self.structure == 'flipped-tms':
             width, _ = tile.layer.grid(tile.z)
             return os.path.join("1.0.0",
                                 tile.layer.name,
                                 "%s" % int(tile.z),
                                 "%s" % int(tile.x),
                                 "%s.%s" % (tile.y, tile.layer.extension))
-        elif self.structure == 'flipped-tms':
-            raise NotImplementedError() # todo
+            
         elif self.structure == 'google':
             width, _ = tile.layer.grid(tile.z)
             return os.path.join(self.basedir,
                                 tile.layer.name,
                                 "%s" % int(tile.z),
                                 "%s" % int(tile.x),
-                                "%s.%s" % (int(grid[1] - 1 - tile.y), tile.layer.extension))        
+                                "%s.%s" % (int(width - 1 - tile.y), tile.layer.extension))        
 
         elif self.structure == 's3':
             return "-".join(map(str, [tile.layer.name, tile.z , tile.x, tile.y]))
@@ -69,7 +76,7 @@ class Cache (object):
         elif self.structure == 'memcached':
             return "/".join(map(str, [tile.layer.name, tile.x, tile.y, tile.z]))
         else:
-            raise NotImplementedError()
+            raise NotImplementedError("unknown structure '%s'"%self.structure)
 
     def attemptLock (self, tile):
         raise NotImplementedError()

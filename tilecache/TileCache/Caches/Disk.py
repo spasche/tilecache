@@ -53,20 +53,6 @@ class Disk (Cache):
             else:
                 return os.access(path, os.W_OK)
 
-#     def getKey (self, tile):
-#         components = ( self.basedir,
-#                        tile.layer.name,
-#                        "%02d" % tile.z,
-#                        "%03d" % int(tile.x / 1000000),
-#                        "%03d" % (int(tile.x / 1000) % 1000),
-#                        "%03d" % (int(tile.x) % 1000),
-#                        "%03d" % int(tile.y / 1000000),
-#                        "%03d" % (int(tile.y / 1000) % 1000),
-#                        "%03d.%s" % (int(tile.y) % 1000, tile.layer.extension)
-#                     )
-#         filename = os.path.join( *components )
-#         return filename
-
     def get (self, tile):
         filename = self.getKey(tile)
         if self.access(filename, 'read'):

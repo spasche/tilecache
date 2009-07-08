@@ -5,6 +5,9 @@ import memcache
 from TileCache.Cache import Cache
 
 class Memcached(Cache):
+
+    default_structure = 'memcached'
+
     def __init__ (self, servers = ['127.0.0.1:11211'], **kwargs):
         Cache.__init__(self, **kwargs)
         if type(servers) is str: servers = map(str.strip, servers.split(","))
