@@ -37,8 +37,7 @@ class Cache (object):
 
     def getKey (self, tile):
         if self.structure == 'disk':
-            return os.path.join(self.basedir,
-                                tile.layer.name,
+            return os.path.join(tile.layer.name,
                                 "%02d" % int(tile.z),
                                 "%03d" % int(tile.x / 1000000),
                                 "%03d" % (int(tile.x / 1000) % 1000),
@@ -64,8 +63,7 @@ class Cache (object):
             
         elif self.structure == 'google':
             width, _ = tile.layer.grid(tile.z)
-            return os.path.join(self.basedir,
-                                tile.layer.name,
+            return os.path.join(tile.layer.name,
                                 "%s" % int(tile.z),
                                 "%s" % int(tile.x),
                                 "%s.%s" % (int(width - 1 - tile.y), tile.layer.extension))        

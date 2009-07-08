@@ -54,7 +54,8 @@ class Disk (Cache):
                 return os.access(path, os.W_OK)
 
     def get (self, tile):
-        filename = self.getKey(tile)
+        key = self.getKey(tile)
+        filename = os.path.join(self.basedir, key)
         if self.access(filename, 'read'):
             tile.data = file(filename, "rb").read()
             return tile.data
@@ -63,7 +64,8 @@ class Disk (Cache):
 
     def set (self, tile, data):
         if self.readonly: return data
-        filename = self.getKey(tile)
+        key = self.getKey(tile)
+        filename = os.path.join(self.basedir, key)
         dirname  = os.path.dirname(filename)
         if not self.access(dirname, 'write'):
             self.makedirs(dirname)
