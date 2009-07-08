@@ -52,7 +52,7 @@ class Cache (object):
                                 tile.layer.name,
                                 "%s" % int(tile.z),
                                 "%s" % int(tile.x),
-                                "%s.%s" % (int(width - 1 - tile.y), tile.layer.extension))
+                                "%s.%s" % (tile.y, tile.layer.extension))
         
         elif self.structure == 'flipped-tms':
             width, _ = tile.layer.grid(tile.z)
@@ -60,7 +60,7 @@ class Cache (object):
                                 tile.layer.name,
                                 "%s" % int(tile.z),
                                 "%s" % int(tile.x),
-                                "%s.%s" % (tile.y, tile.layer.extension))
+                                "%s.%s" % (int(width - 1 - tile.y), tile.layer.extension))
             
         elif self.structure == 'google':
             width, _ = tile.layer.grid(tile.z)
