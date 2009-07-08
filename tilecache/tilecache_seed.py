@@ -11,7 +11,7 @@ from TileCache.Seed import seed
 from TileCache.Service import Service, cfgfiles
 from TileCache.Layer import Layer
 
-if __name__ == "__main__":
+def main():
     usage = "usage: %prog <layer> [<zoom start> <zoom stop>]"
     
     parser = OptionParser(usage=usage, version="%prog $Id$")
@@ -55,3 +55,6 @@ if __name__ == "__main__":
             seed(svc, layer, bbox=bbox,
                  skip_empty=options.skip_empty, padding=options.padding,
                  force = options.force, reverse = options.reverse)
+
+if __name__ == "__main__":
+    main()
