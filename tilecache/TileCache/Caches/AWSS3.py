@@ -8,8 +8,13 @@ class AWSS3(Cache):
 
     default_structure = 's3'
     
-    def __init__ (self, access_key, secret_access_key, bucket_name=None, **kwargs):
+    def __init__ (self, access_key, secret_access_key, bucket_name=None, policy=None, **kwargs):
         Cache.__init__(self, **kwargs)
+        if policy in s3.acl.CannedACLStrings:
+            self.policy = policy
+        else:
+            self.policy = 'private'
+            
         self.bucket_name = bucket_name or "%s-tilecache" % access_key.lower() 
         self.cache = self.s3.connection.S3Connection(access_key, secret_access_key)
         self.bucket = self.cache.lookup(self.bucket_name)
@@ -43,7 +48,7 @@ class AWSS3(Cache):
             return data
     
     def setObject(self, key, data):
-        self.getBotoKey(key).set_contents_from_string(data)
+        self.getBotoKey(key).set_contents_from_string(data, policy=self.policy)
         self.bucket.connection.connection.close()    
     
     def delete(self, tile):
