@@ -32,16 +32,16 @@ def main():
 
     (options, args) = parser.parse_args()
 
-    if len(args)>3:
+    if len(args) > 3:
         parser.error("Incorrect number of arguments. bbox and padding are now options (-b and -p)")
 
     svc = Service.load(*cfgfiles)
     layer = svc.layers[args[0]]
 
     if options.bbox:
-        bboxlist = map(float,options.bbox.split(","))
+        bboxlist = map(float, options.bbox.split(","))
     else:
-        bboxlist=None
+        bboxlist = None
 
     if len(args) > 1:
         seed(svc, layer, levels=map(int, args[1:3]), bbox=bboxlist,
