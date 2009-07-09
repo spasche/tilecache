@@ -19,7 +19,7 @@ def seed(service, layer, levels=None, bbox=None, skip_empty=True, padding=0, for
         layersObj = []
         for layerName in layer.layers.split(','):
             for layerObj in getLayersByName(mapObj, layerName):
-                if layerObj.type == mapscript.MS_RASTER:
+                if layerObj.type == mapscript.MS_LAYER_RASTER:
                     # FIXME: find all the raster bbox from the tileindex
                     pass
                 else:
