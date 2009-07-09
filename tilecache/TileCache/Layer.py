@@ -2,8 +2,8 @@
 
 import sys
 from math import ceil
-from Client import WMS
-from Service import TileCacheException
+from TileCache.Services.WMS import WMS
+from TileCache.Service import TileCacheException
 
 DEBUG = True
 

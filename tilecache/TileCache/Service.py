@@ -13,10 +13,8 @@ try:
 except ImportError:
     import StringIO
 
-import TileCache.Cache
-import TileCache.Caches
-import TileCache.Layer
-import TileCache.Layers
+from TileCache.Cache import Cache
+import Layer
 
 class TileCacheException(Exception):
     pass

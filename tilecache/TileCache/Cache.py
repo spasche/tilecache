@@ -3,6 +3,9 @@ import time
 import os
 
 class Cache (object):
+
+    default_structure = None
+
     def __init__ (self, timeout = 30.0, stale_interval = 300.0, readonly = False, structure=None, **kwargs):
         self.stale = float(stale_interval)
         self.timeout = float(timeout)
