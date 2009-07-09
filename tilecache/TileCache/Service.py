@@ -2,8 +2,6 @@
 
 # BSD Licensed, Copyright (c) 2006-2008 MetaCarta, Inc.
 
-class TileCacheException(Exception): pass
-
 import sys
 import cgi
 import time
@@ -17,6 +15,9 @@ except ImportError:
 
 import Cache, Caches
 import Layer, Layers
+
+class TileCacheException(Exception):
+    pass
 
 # Windows doesn't always do the 'working directory' check correctly.
 if sys.platform == 'win32':
