@@ -4,7 +4,17 @@
 
 class TileCacheException(Exception): pass
 
-import sys, cgi, time, os, traceback, ConfigParser
+import sys
+import cgi
+import time
+import os
+import traceback
+import ConfigParser
+try:
+    import cStringIO as StringIO
+except ImportError:
+    import StringIO
+
 import Cache, Caches
 import Layer, Layers
 
@@ -218,10 +228,6 @@ class Service (object):
                     import PIL.Image as Image
                 except ImportError:
                     raise Exception("Combining multiple layers requires Python Imaging Library.")
-                try:
-                    import cStringIO as StringIO
-                except ImportError:
-                    import StringIO
                 
                 result = None
                 
