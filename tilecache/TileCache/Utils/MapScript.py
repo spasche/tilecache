@@ -1,3 +1,5 @@
+import os
+from osgeo import ogr
 import mapscript
 from TileCache.Layer import MetaTile
 
@@ -43,13 +45,13 @@ def raster_shapes(layerObj, extent=None):
     layer = ds.GetLayerByIndex(0)
     layer.ResetReading()
     
-    tiles = []
     if extent is not None:
-        # FIXME: use SetSpatialFilter here
-        pass
+        layer.SetSpatialFilterRect(*extent)
+        
+    tiles = []
     tile = layer.GetNextFeature()
     while tile:
-        miny, maxy, minx, maxx = tile.GetGeometryRef().GetEnvelope()
+        miny, maxy, minx, maxx = tile.GetGeometryRef().GetEnvelope() # WTF ?
         tiles.append(mapscript.rectObj(minx, miny, maxx, maxy).toPolygon())
         tile = layer.GetNextFeature()
     ds.Destroy()
