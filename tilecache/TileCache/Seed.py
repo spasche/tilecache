@@ -18,17 +18,8 @@ def seed(service, layer, levels=None, bbox=None, skip_empty=True, padding=0, for
         mapObj = mapscript.mapObj(layer.mapfile)
         layersObj = []
         for layerName in layer.layers.split(','):
-            for layerObj in getLayersByName(mapObj, layerName):
-                if layerObj.type == mapscript.MS_LAYER_RASTER:
-                    # FIXME: find all the raster bbox from the tileindex
-                    pass
-                else:
-                    layersObj.append(layerObj)
-    else:
-        # fallback to the default mode
-        skip_empty = False
+            layersObj.extend(getLayersByName(mapObj, layerName))
 
-    if skip_empty:
         # metaSize, reverse, padding not managed
         for x, y, z in tiles(layersObj, layer, bbox, levels):
             start = time.time()
