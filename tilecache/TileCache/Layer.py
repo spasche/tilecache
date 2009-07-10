@@ -303,7 +303,7 @@ class Layer (object):
         xindex = int(px) / self.size[0]
         yindex = int(py) / self.size[1]
 
-        maxx, maxy = tuple([ceil(m) for m in self.grid(z)])
+        maxx, maxy = tuple([int(ceil(m)) for m in self.grid(z)])
         if xindex < 0: xindex = 0
         elif xindex > maxx: xindex = maxx
 
