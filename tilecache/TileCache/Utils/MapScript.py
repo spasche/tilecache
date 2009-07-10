@@ -6,19 +6,13 @@ def valid_extent(rectObj):
     return rectObj.minx != -1 and rectObj.miny != -1 and \
            rectObj.maxx != -1 and rectObj.maxy != -1
 
-# def shapes(layerObj, extent=None):
-#     # FIXME: extent
-#     tileindex = os.path.join(layerObj.map.shapepath, layerObj.tileindex + ".shp")
-#     ds = ogr.Open(tileindex)
-#     layer = ds.GetLayerByIndex(0) # ?
-#     tile = layer.GetNextFeature()
-#     while tile:
-#         miny, maxy, minx, maxx = tile.GetGeometryRef().GetEnvelope()
-#         yield mapscript.rectObj(minx, miny, maxx, maxy).toPolygon()
-#         tile = layer.GetNextFeature()
-#     ds.Destroy()
-
 def shapes(layerObj, extent=None):
+    if layerObj.type == mapscript.MS_LAYER_RASTER:
+        return raster_shapes(layerObj, extent)
+    else:
+        return vector_shapes(layerObj, extent)
+
+def vector_shapes(layerObj, extent=None):
     """ return all the shapes from 'layerObj' inside 'extent' """
     if extent is None:
         if valid_extent(layerObj.extent):
@@ -42,6 +36,25 @@ def shapes(layerObj, extent=None):
     layerObj.close()
 
     return shapes
+
+def raster_shapes(layerObj, extent=None):    
+    tileindex = os.path.join(layerObj.map.shapepath, layerObj.tileindex + ".shp")
+    ds = ogr.Open(tileindex)
+    layer = ds.GetLayerByIndex(0)
+    layer.ResetReading()
+    
+    tiles = []
+    if extent is not None:
+        # FIXME: use SetSpatialFilter here
+        pass
+    tile = layer.GetNextFeature()
+    while tile:
+        miny, maxy, minx, maxx = tile.GetGeometryRef().GetEnvelope()
+        tiles.append(mapscript.rectObj(minx, miny, maxx, maxy).toPolygon())
+        tile = layer.GetNextFeature()
+    ds.Destroy()
+
+    return tiles
 
 def intersects(shapeObj, rectObj):
     """ return whatever 'shapeObj' and 'rectObj' intersect """
