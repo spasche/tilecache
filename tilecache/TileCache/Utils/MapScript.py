@@ -51,7 +51,7 @@ def raster_shapes(layerObj, extent=None):
     tiles = []
     tile = layer.GetNextFeature()
     while tile:
-        miny, maxy, minx, maxx = tile.GetGeometryRef().GetEnvelope() # WTF ?
+        minx, maxx, miny, maxy = tile.GetGeometryRef().GetEnvelope() # WTF ?
         tiles.append(mapscript.rectObj(minx, miny, maxx, maxy).toPolygon())
         tile = layer.GetNextFeature()
     ds.Destroy()
