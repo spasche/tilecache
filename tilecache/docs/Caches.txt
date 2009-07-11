@@ -4,6 +4,16 @@ TileCache Caches
 TileCache offers access to a number of different caches. These caches are used
 to store tiles. 
 
+For every cache configuration a 'structure' option can be set: this option set
+how the tiles are stored. Each cache type has a default structure.
+Possible values are:
+  * disk: default 'Disk'
+  * tms
+  * flipped-tms
+  * google: default for 'GoogleDisk'
+  * s3: default for 'AWSS3'
+  * memcached: default for 'Memcached'
+
 Disk
 ----
 Example Configuration::
@@ -17,6 +27,8 @@ Dependencies: None
 
 GoogleDisk
 ----
+This cache is deprecated: use a Disk cache and set the structure to google.
+
 Example Configuration::
 
   [cache]
