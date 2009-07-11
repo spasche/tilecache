@@ -1,6 +1,7 @@
 # BSD Licensed, Copyright (c) 2006-2008 MetaCarta, Inc.
 
 from TileCache.Layer import MetaLayer 
+import mapscript
 
 class MapServer(MetaLayer):
     
@@ -18,7 +19,6 @@ class MapServer(MetaLayer):
     def get_map(self, tile=None):
         # tile is unused here but might be used in a subclass
         # where the mapfile config depends on the tile extents or layer
-        import mapscript
         wms = mapscript.mapObj(self.mapfile) 
         if self.metaBuffer:
             try:
@@ -33,7 +33,6 @@ class MapServer(MetaLayer):
         return wms
 
     def get_request(self, tile):
-        import mapscript
         req = mapscript.OWSRequest()
         req.setParameter("bbox", tile.bbox())
         req.setParameter("width", str(tile.size()[0]))
