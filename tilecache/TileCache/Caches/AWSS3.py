@@ -19,7 +19,7 @@ class AWSS3(Cache):
         self.cache = self.s3.connection.S3Connection(access_key, secret_access_key)
         self.bucket = self.cache.lookup(self.bucket_name)
         if not self.bucket:
-            self.bucket = self.cache.create_bucket(self.bucket_name)
+            self.bucket = self.cache.create_bucket(self.bucket_name, policy=self.policy)
     
     def getBotoKey(self, key):
         boto_key = self.s3.key.Key(self.bucket)
