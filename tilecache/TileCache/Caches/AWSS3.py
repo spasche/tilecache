@@ -8,7 +8,7 @@ class AWSS3(Cache):
 
     default_structure = 's3'
     
-    def __init__ (self, access_key, secret_access_key, bucket_name=None, policy=None, **kwargs):
+    def __init__ (self, access_key, secret_access_key, bucket_name=None, location=None, policy=None, **kwargs):
         Cache.__init__(self, **kwargs)
         if policy in s3.acl.CannedACLStrings:
             self.policy = policy
@@ -19,7 +19,7 @@ class AWSS3(Cache):
         self.cache = self.s3.connection.S3Connection(access_key, secret_access_key)
         self.bucket = self.cache.lookup(self.bucket_name)
         if not self.bucket:
-            self.bucket = self.cache.create_bucket(self.bucket_name, policy=self.policy)
+            self.bucket = self.cache.create_bucket(self.bucket_name, location=location, policy=self.policy)
     
     def getBotoKey(self, key):
         boto_key = self.s3.key.Key(self.bucket)

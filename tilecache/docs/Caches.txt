@@ -50,26 +50,24 @@ Example configuration::
   access_key=833833ABC88838
   secret_access_key=8234abyi3kdjby8so8idu
   bucket_name=mybucketname
-  use_tms_paths=true
-
-The use_tms_paths will make the files more accessible to other clients,
-though at this time, ACLs are not set on the TMS structure to make them
-available publicly.
-
-The use_tms_paths can also be set to "flipped": if so, it will result in
-'flipped' TMS, with typical paths like:
-
-  /1.0.0/9/82/63.png
-
-But with 0 starting at the top of the map, instead of the bottom. 
+  policy=public-read
+  location=EU
 
 Use bucket_name if you need to name your bucket. If the property is left over,
 TileCache will generate a name based on your access key.
 This name cannot contain upper-case characters.
 
-This cache uses the boto libraries available from
-http://code.google.com/p/boto/, boto is a package that wraps the Amazon APIs in
-a Pythonic wrapper. This is installable on recent Debian-based distributions as
-python-boto. It can be installed via easy_install from setuptools as well:
-simply easy_install boto.
+The bucket and content access can be set using the policy option. Possible
+values are 'private', 'public-read', 'public-read-write' or
+'authenticated-read'. Default is 'private'
+
+location set the bucket location. Possible value is 'EU'. The default is to
+store the bucket in the US.
+
+Dependencies:
+  This cache uses the boto libraries available from
+  http://code.google.com/p/boto/, boto is a package that wraps the Amazon APIs in
+  a Pythonic wrapper. This is installable on recent Debian-based distributions as
+  python-boto. It can be installed via easy_install from setuptools as well:
+  simply easy_install boto.
 
