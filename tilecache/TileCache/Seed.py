@@ -4,13 +4,13 @@ from TileCache.Utils.MapScript import getLayersByName, tiles
 from TileCache.Layer import Tile
 
 def seed(service, layer, levels=None, bbox=None, skip_empty=True, padding=0, force=False, reverse=False):
-    if not levels:
+    if levels is None:
         levels = (0, len(layer.resolutions))
     else:
         levels[0] = max(0, levels[0])
         levels[1] = min(len(layer.resolutions), levels[1])
         
-    if not bbox:
+    if bbox is None:
         bbox = layer.bbox
 
     if skip_empty and hasattr(layer, 'mapfile'):

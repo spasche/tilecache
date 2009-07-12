@@ -82,5 +82,3 @@ def tiles(layersObj, tcLayer, bbox=None, levels=None):
                     if intersects(shape, tile.bounds()):
                         done.append((x, y, z))
                         yield x, y, z
-
-
