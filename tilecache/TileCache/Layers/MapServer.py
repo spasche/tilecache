@@ -1,7 +1,7 @@
 # BSD Licensed, Copyright (c) 2006-2008 MetaCarta, Inc.
 
-from TileCache.Layer import MetaLayer 
 import mapscript
+from TileCache.Layer import MetaLayer 
 
 class MapServer(MetaLayer):
     
