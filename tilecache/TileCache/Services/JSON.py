@@ -1,9 +1,10 @@
-from TileCache.Services.TMS import TMS
-from TileCache.Service import Request, Capabilities
 try:
     from json import dumps
 except ImportError:
     from simplejson import dumps
+
+from TileCache.Services.TMS import TMS
+from TileCache.Service import Request, Capabilities
 
 class JSON(TMS):
     def parse(self, fields, path, host):
