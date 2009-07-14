@@ -137,31 +137,18 @@ class Service (object):
         return ('text/xml', "\n".join(xml))       
 
     def renderTile (self, tile, force = False):
-        start = time.time()
-
         # do more cache checking here: SRS, width, height, layers 
-
         layer = tile.layer
         image = None
         if not force:
             image = self.cache.get(tile)
-        if not image:
+        if not image and (not self.cache.readonly or force):
             data = layer.render(tile, force=force)
             if data:
                 image = self.cache.set(tile, data)
             else:
                 raise Exception("Zero length data returned from layer.")
-            
-            if layer.debug:
-                sys.stderr.write(
-                "Cache miss: %s, Tile: x: %s, y: %s, z: %s, time: %s\n" % (
-                    tile.bbox(), tile.x, tile.y, tile.z, (time.time() - start)) )
-        else:
-            if layer.debug:
-                sys.stderr.write(
-                "Cache hit: %s, Tile: x: %s, y: %s, z: %s, time: %s, debug: %s\n" % (
-                    tile.bbox(), tile.x, tile.y, tile.z, (time.time() - start), layer.debug) )
-        
+
         return (layer.mime_type, image)
 
     def expireTile (self, tile):
