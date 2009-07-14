@@ -1,7 +1,7 @@
 # BSD Licensed, Copyright (c) 2006-2008 MetaCarta, Inc.
 
 from TileCache.Service import Request, Capabilities
-import TileCache.Layer as Layer
+#import TileCache.Layer as Layer # unused
 
 class WMS (Request):
     def parse (self, fields, path, host):
