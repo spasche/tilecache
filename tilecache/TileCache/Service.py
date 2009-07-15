@@ -30,15 +30,15 @@ else:
 class Capabilities (object):
     def __init__ (self, format, data):
         self.format = format
-        self.data   = data
+        self.data = data
 
 class Request (object):
     def __init__ (self, service):
         self.service = service
     def getLayer(self, layername):    
-        try:
+        if layername in self.service.layers:
             return self.service.layers[layername]
-        except:
+        else:
             raise TileCacheException("The requested layer (%s) does not exist. Available layers are: \n * %s" % (layername, "\n * ".join(self.service.layers.keys()))) 
 
     
