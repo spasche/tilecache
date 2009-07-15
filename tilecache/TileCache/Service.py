@@ -221,20 +221,21 @@ class Service (object):
                 
                 for t in tile:
                     (format, data) = self.renderTile(t, params.has_key('FORCE'))
+                    if data is None:
+                        continue
                     image = Image.open(StringIO.StringIO(data))
                     if not result:
                         result = image
                     else:
-                        try:
-                            result.paste(image, None, image)
-                        except Exception, E:
-                            raise Exception("Could not combine images: Is it possible that some layers are not \n8-bit transparent images? \n(Error was: %s)" % E) 
-                
-                buffer = StringIO.StringIO()
-                result.save(buffer, result.format)
-                buffer.seek(0)
+                        result.paste(image, None, image)
 
-                return (format, buffer.read())
+                if result is None:
+                    return (format, None)
+                else:
+                    buffer = StringIO.StringIO()
+                    result.save(buffer, result.format)
+                    buffer.seek(0)
+                    return (format, buffer.read())
         else:
             return (tile.format, tile.data)
 
@@ -252,9 +253,12 @@ def modPythonHandler (apacheReq, service):
                                 apacheReq.method,
                                 host )
         apacheReq.content_type = format
-        apacheReq.status = apache.HTTP_OK
+        if image is None:
+            apacheReq.status = apache.HTTP_NO_CONTENT
+        else:
+            apacheReq.status = apache.HTTP_OK
         apacheReq.send_http_header()
-        apacheReq.write(image)
+        apacheReq.write(image or '')
     except TileCacheException, E:
         apacheReq.content_type = "text/plain"
         apacheReq.status = apache.HTTP_NOT_FOUND
