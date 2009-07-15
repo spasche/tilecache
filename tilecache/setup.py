@@ -43,7 +43,6 @@ setup(name='TileCache',
                'tilecache_seed.py', 'tilecache_install_config.py', 
                'tilecache_clean.py', 'tilecache_http_server.py'],
       zip_safe=False,
-      test_suite = 'tests.run_doc_tests',
       license="BSD",
       classifiers=classifiers,
       entry_points = """
