@@ -346,8 +346,10 @@ class Layer (object):
         """
         
         coord = self.getCell(bbox)
-        if not coord: return None
-        return Tile(self, *coord)
+        if not coord:
+            return None
+        else:
+            return Tile(self, *coord)
 
     def contains (self, (x, y), res = 0):
         """
