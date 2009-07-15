@@ -19,12 +19,12 @@ class WMS (Request):
             return self.getMap(param)
 
     def getMap (self, param):
-        bbox  = map(float, param["bbox"].split(","))
+        bbox = map(float, param["bbox"].split(","))
         layers = param["layers"].split(",")
 
-        tiles =  []
+        tiles = []
         for name in layers:
-            tile  = self.getLayer(name).getTile(bbox)
+            tile = self.getLayer(name).getTile(bbox)
             if not tile:
                 raise Exception(
                     "couldn't calculate tile index for layer %s from (%s)"
