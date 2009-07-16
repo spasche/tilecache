@@ -28,8 +28,8 @@ def vector_shapes(layerObj, extent=None):
     status = layerObj.whichShapes(extent)
     if status != mapscript.MS_SUCCESS:
         layerObj.close()
-        raise mapscript.MapServerError('error while querying layer')
-
+        raise mapscript.MapServerError("error while querying layer: '%s'"%layerObj.name)
+    
     shapes = []
     shape = layerObj.nextShape()
     while shape:
