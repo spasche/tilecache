@@ -90,7 +90,10 @@ class Disk (Cache):
             filename = self.getKey(tile)
             if self.access(filename, 'read'):
                 os.unlink(filename)
-            
+
+    def getLockName (self, tile):
+        return os.path.join(self.basedir, self.getKey(tile) + ".lck")
+
     def attemptLock (self, tile):
         name = self.getLockName(tile)
         try: 
