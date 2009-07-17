@@ -54,8 +54,7 @@ class Disk (Cache):
                 return os.access(path, os.W_OK)
 
     def get (self, tile):
-        key = self.getKey(tile)
-        filename = os.path.join(self.basedir, key)
+        filename = os.path.join(self.basedir, self.getKey(tile))
         if self.access(filename, 'read'):
             tile.data = file(filename, "rb").read()
             return tile.data
@@ -64,8 +63,7 @@ class Disk (Cache):
 
     def set (self, tile, data, force=False):
         if self.readonly and not force: return data
-        key = self.getKey(tile)
-        filename = os.path.join(self.basedir, key)
+        filename = os.path.join(self.basedir, self.getKey(tile))
         dirname  = os.path.dirname(filename)
         if not self.access(dirname, 'write'):
             self.makedirs(dirname)
@@ -87,7 +85,7 @@ class Disk (Cache):
     
     def delete (self, tile):                
         if not self.readonly:
-            filename = self.getKey(tile)
+            filename = os.path.join(self.basedir, self.getKey(tile))
             if self.access(filename, 'read'):
                 os.unlink(filename)
 
