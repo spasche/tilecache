@@ -10,7 +10,7 @@ class Test(Cache):
     def get(self, tile):
         return None
     
-    def set(self, tile, data):
+    def set(self, tile, data, force=False):
         return data 
     
     def getKey(self, tile):

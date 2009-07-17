@@ -143,9 +143,9 @@ class Service (object):
         if not force:
             image = self.cache.get(tile)
         if not image and (not self.cache.readonly or force):
-            data = layer.render(tile, force=force)
+            data = layer.render(tile)
             if data:
-                image = self.cache.set(tile, data)
+                image = self.cache.set(tile, data, force)
             else:
                 raise Exception("Zero length data returned from layer.")
 

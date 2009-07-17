@@ -89,7 +89,7 @@ class Cache (object):
     def get (self, tile):
         raise NotImplementedError()
 
-    def set (self, tile, data):
+    def set (self, tile, data, force=False):
         raise NotImplementedError()
     
     def delete(self, tile):

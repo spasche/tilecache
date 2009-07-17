@@ -18,8 +18,8 @@ class Memcached(Cache):
         tile.data = self.cache.get(key)
         return tile.data
     
-    def set(self, tile, data):
-        if self.readonly:
+    def set(self, tile, data, force=False):
+        if self.readonly and not force:
             return data
         else:
             key = self.getKey(tile)

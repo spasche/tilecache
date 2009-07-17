@@ -62,8 +62,8 @@ class Disk (Cache):
         else:
             return None
 
-    def set (self, tile, data):
-        if self.readonly: return data
+    def set (self, tile, data, force=False):
+        if self.readonly and not force: return data
         key = self.getKey(tile)
         filename = os.path.join(self.basedir, key)
         dirname  = os.path.dirname(filename)
