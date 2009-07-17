@@ -2,6 +2,12 @@
 
 import sys
 from math import ceil
+
+try:
+    import cStringIO as StringIO
+except ImportError:
+    import StringIO
+    
 from TileCache.Services.WMS import WMS
 from TileCache.Service import TileCacheException
 
@@ -437,7 +443,7 @@ class MetaLayer (Layer):
         return MetaTile(self, x, y, tile.z) 
 
     def renderMetaTile (self, metatile, tile, force=False):
-        import StringIO, Image
+        import Image
 
         data = self.renderTile(metatile)
         image = Image.open( StringIO.StringIO(data) )
@@ -490,7 +496,7 @@ class MetaLayer (Layer):
                 return self.renderTile(tile)
 
     def watermark (self, img):
-        import StringIO, Image, ImageEnhance
+        import Image, ImageEnhance
         tileImage = Image.open( StringIO.StringIO(img) )
         wmark = Image.open(self.watermarkimage)
         assert self.watermarkopacity >= 0 and self.watermarkopacity <= 1
