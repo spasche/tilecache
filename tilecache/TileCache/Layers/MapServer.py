@@ -9,13 +9,20 @@ class MapServer(MetaLayer):
       {'name':'name', 'description': 'Name of Layer'}, 
       {'name':'mapfile', 'description': 'Location of MapServer map file.'},
     ] + MetaLayer.config_properties 
+
+    mapfiles = {}
     
     def __init__ (self, name, mapfile = None, styles = "", **kwargs):
         MetaLayer.__init__(self, name, **kwargs) 
         self.mapfile = mapfile
         self.styles = styles
-        self.map = self.get_map()
 
+    @property
+    def mapObj(self):
+        if self.mapfile not in MapServer.mapfiles:
+            MapServer.mapfiles[self.mapfile] = self.get_map()
+        return MapServer.mapfiles[self.mapfile]
+    
     def get_map(self, tile=None):
         # tile is unused here but might be used in a subclass
         # where the mapfile config depends on the tile extents or layer
@@ -46,12 +53,8 @@ class MapServer(MetaLayer):
 
     def renderTile(self, tile):
         req = self.get_request(tile)
-        self.map.loadOWSParameters(req)
-        mapImage = self.map.draw()
+        self.mapObj.loadOWSParameters(req)
+        mapImage = self.mapObj.draw()
         tile.data = mapImage.getBytes()
 
-        # FIXME: bug with mapscript:
-        # if the image is in palette mode
-        # mapImage.getBytes() != mapImage.save()
-        
         return tile.data 
