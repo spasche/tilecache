@@ -75,10 +75,10 @@ def tiles(layersObj, tcLayer, bbox=None, levels=None):
     """ yield all non empty tiles indexes (x, y, z) """
     done = []
     for layerObj in layersObj:
-        for shape in shapes(layerObj, bbox):
-            for x, y, z in tcLayer.range(shape.bounds, levels):
+        for shapeObj in shapes(layerObj, bbox):
+            for x, y, z in tcLayer.range(shapeObj.bounds, levels):
                 if (x, y, z) not in done:
                     tile = MetaTile(tcLayer, x, y, z)
-                    if intersects(shape, tile.bounds()):
+                    if intersects(shapeObj, tile.bounds()):
                         done.append((x, y, z))
-                        yield x, y, z
+                        yield layerObj, shapeObj, x, y, z
