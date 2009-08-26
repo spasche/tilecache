@@ -1,3 +1,9 @@
+tilecache (r391~c2c-git20090826) unstable; urgency=low
+
+  * Use git sources from http://github.com/fredj/tilecache/tree/master
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 26 Aug 2009 10:06:28 +0200
+
 tilecache (2.03-1) unstable; urgency=low
 
   * New upstream release.
