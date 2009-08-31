@@ -8,7 +8,7 @@ class AWSS3(Cache):
 
     default_structure = 's3'
     
-    def __init__ (self, access_key, secret_access_key, bucket_name=None, location=None, policy=None, **kwargs):
+    def __init__ (self, access_key, secret_access_key, bucket_name=None, location='', policy=None, **kwargs):
         Cache.__init__(self, **kwargs)
         if policy in s3.acl.CannedACLStrings:
             self.policy = policy
