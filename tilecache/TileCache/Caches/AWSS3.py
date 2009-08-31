@@ -37,7 +37,6 @@ class AWSS3(Cache):
             data = self.getBotoKey(key).get_contents_as_string()
         except:
             data = None
-        self.bucket.connection.connection.close()    
         return data
         
     def set(self, tile, data, force=False):
@@ -52,7 +51,6 @@ class AWSS3(Cache):
         key = self.getBotoKey(key)
         key.set_contents_from_string(data)
         key.set_acl(self.policy)
-        self.bucket.connection.connection.close()    
     
     def delete(self, tile):
         if not self.readonly:
