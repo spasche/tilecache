@@ -29,7 +29,7 @@ def vector_shapes(layerObj, extent=None):
     if status != mapscript.MS_SUCCESS:
         layerObj.close()
         raise mapscript.MapServerError("error while querying layer: '%s'"%layerObj.name)
-    
+
     shapes = []
     shape = layerObj.nextShape()
     while shape:
@@ -39,15 +39,15 @@ def vector_shapes(layerObj, extent=None):
 
     return shapes
 
-def raster_shapes(layerObj, extent=None):    
+def raster_shapes(layerObj, extent=None):
     tileindex = os.path.join(layerObj.map.shapepath, layerObj.tileindex + ".shp")
     ds = ogr.Open(tileindex)
     layer = ds.GetLayerByIndex(0)
     layer.ResetReading()
-    
+
     if extent is not None:
         layer.SetSpatialFilterRect(*extent)
-        
+
     tiles = []
     tile = layer.GetNextFeature()
     while tile:
