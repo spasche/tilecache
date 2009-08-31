@@ -50,13 +50,75 @@ def import_module(name):
         mod = getattr(mod, comp)
     return mod
 
+class ImageMerger:
+    def __init__ (self, service):
+        self.service = service
+
+class ImageMergeMerger(ImageMerger):
+    @staticmethod
+    def available():
+        try:
+            import image_merge
+        except ImportError:
+            return False
+        return True
+
+    def merge(self, tiles, params):
+        import image_merge
+
+        images = []
+        for t in tiles:
+            (format, data) = self.service.renderTile(t, params.has_key('FORCE'))
+            if data is None:
+                continue
+            images.append(data)
+
+        return (format, image_merge.merge(*images))
+                    
+class PILMerger(ImageMerger):
+    @staticmethod
+    def available():
+        try:
+            import PIL.Image
+        except ImportError:
+            return False
+        return True
+                    
+    def merge(self, tiles, params):
+        import PIL.Image as Image
+        result = None
+        for t in tiles:
+            (format, data) = self.service.renderTile(t, params.has_key('FORCE'))
+            if data is None:
+                continue
+            image = Image.open(StringIO.StringIO(data))
+            if not result:
+                result = image
+            else:
+                result.paste(image, None, image)
+
+        if result is None:
+            return (format, None)
+        else:
+            buffer = StringIO.StringIO()
+            result.save(buffer, result.format)
+            buffer.seek(0)
+            return (format, buffer.read())
+
 class Service (object):
-    __slots__ = ("layers", "cache", "metadata", "tilecache_options", "config", "files")
+    __slots__ = ("layers", "cache", "metadata", "tilecache_options", "config", "files", "image_merger")
 
     def __init__ (self, cache, layers, metadata = {}):
         self.cache    = cache
         self.layers   = layers
         self.metadata = metadata
+        
+        self.image_merger = None
+        # image-merge is preferred over PIL if available because it is faster.
+        for merger_class in [ImageMergeMerger, PILMerger]:
+            if merger_class.available():
+                self.image_merger = merger_class(self)
+                break
  
     def _loadFromSection (cls, config, section, module, **objargs):
         type  = config.get(section, "type")
@@ -208,34 +270,17 @@ class Service (object):
             else:
                 return self.renderTile(tile, params.has_key('FORCE'))
         elif isinstance(tile, list):
+            tiles = tile
             if req_method == 'DELETE':
-                [self.expireTile(t) for t in tile]
+                [self.expireTile(t) for t in tiles]
                 return ('text/plain', 'OK')
             else:
-                try:
-                    import PIL.Image as Image
-                except ImportError:
-                    raise Exception("Combining multiple layers requires Python Imaging Library.")
-                
-                result = None
-                
-                for t in tile:
-                    (format, data) = self.renderTile(t, params.has_key('FORCE'))
-                    if data is None:
-                        continue
-                    image = Image.open(StringIO.StringIO(data))
-                    if not result:
-                        result = image
-                    else:
-                        result.paste(image, None, image)
-
-                if result is None:
-                    return (format, None)
-                else:
-                    buffer = StringIO.StringIO()
-                    result.save(buffer, result.format)
-                    buffer.seek(0)
-                    return (format, buffer.read())
+                assert len(tiles)> 0, "No tiles to merge"
+                if not self.image_merger:
+                    raise Exception("You need either python-image-merge or "
+                                    "Python Imaging Library for combining "
+                                    "multiple layers")
+                return self.image_merger.merge(tiles, params)
         else:
             return (tile.format, tile.data)
 
