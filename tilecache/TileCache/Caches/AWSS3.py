@@ -19,7 +19,8 @@ class AWSS3(Cache):
         self.cache = s3.connection.S3Connection(access_key, secret_access_key)
         self.bucket = self.cache.lookup(self.bucket_name)
         if not self.bucket:
-            self.bucket = self.cache.create_bucket(self.bucket_name, location=location, policy=self.policy)
+            self.bucket = self.cache.create_bucket(self.bucket_name, location=location)
+            self.bucket.set_acl(self.policy)
     
     def getBotoKey(self, key):
         boto_key = s3.key.Key(self.bucket)
@@ -48,9 +49,9 @@ class AWSS3(Cache):
             return data
     
     def setObject(self, key, data):
-        #self.getBotoKey(key).set_contents_from_string(data, policy=self.policy)
-        # The policy argument is not supported with python-boto <= 1.2a-1 (debian lenny)
-        self.getBotoKey(key).set_contents_from_string(data)
+        key = self.getBotoKey(key)
+        key.set_contents_from_string(data)
+        key.set_acl(self.policy)
         self.bucket.connection.connection.close()    
     
     def delete(self, tile):
