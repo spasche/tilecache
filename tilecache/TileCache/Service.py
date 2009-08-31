@@ -57,6 +57,8 @@ class ImageMerger:
 class ImageMergeMerger(ImageMerger):
     @staticmethod
     def available():
+        if "TC_NO_IMAGE_MERGE" in os.environ:
+            return False
         try:
             import image_merge
         except ImportError:
