@@ -44,12 +44,12 @@ class AWSS3(Cache):
             return data
         else:
             key = self.getKey(tile)
-            self.setObject(key, data)
+            self.setObject(key, data, tile.layer.mime_type)
             return data
     
-    def setObject(self, key, data):
+    def setObject(self, key, data, mime_type='application/octet-stream'):
         key = self.getBotoKey(key)
-        key.set_contents_from_string(data)
+        key.set_contents_from_string(data, headers={'Content-Type': mime_type})
         key.set_acl(self.policy)
     
     def delete(self, tile):
