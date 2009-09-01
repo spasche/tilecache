@@ -56,7 +56,7 @@ class AWSS3(Cache):
         key = self.getBotoKey(key)
         headers = {'Content-Type': mime_type}
         headers.update(self.cache_control)
-        key.set_contents_from_string(data, headers=headers
+        key.set_contents_from_string(data, headers=headers)
         key.set_acl(self.policy)
     
     def delete(self, tile):
