@@ -54,6 +54,11 @@ class ImageMerger:
     def __init__ (self, service):
         self.service = service
 
+    def preferred(self, tiles, params):
+        """Override this method and return False is this module may not be
+           the best option for the given parameters"""
+        return True
+
 class ImageMergeMerger(ImageMerger):
     @staticmethod
     def available():
@@ -64,6 +69,16 @@ class ImageMergeMerger(ImageMerger):
         except ImportError:
             return False
         return True
+
+    def preferred(self, tiles, params):
+        # Empirical measurements have determined than PIL is faster when merging
+        # a small number of layers. So this module shouldn't be the preferred
+        # one in that case.
+        # This number has been calculed by on a 64-bit Debian system.
+        # Note that results are different when running on a 32-bit system.
+        IMAGE_MERGE_TILES_THRESHOLD = 5
+
+        return len(tiles) > IMAGE_MERGE_TILES_THRESHOLD
 
     def merge(self, tiles, params):
         import image_merge
@@ -108,19 +123,17 @@ class PILMerger(ImageMerger):
             return (format, buffer.read())
 
 class Service (object):
-    __slots__ = ("layers", "cache", "metadata", "tilecache_options", "config", "files", "image_merger")
+    __slots__ = ("layers", "cache", "metadata", "tilecache_options", "config", "files", "image_mergers")
 
     def __init__ (self, cache, layers, metadata = {}):
         self.cache    = cache
         self.layers   = layers
         self.metadata = metadata
         
-        self.image_merger = None
-        # image-merge is preferred over PIL if available because it is faster.
+        self.image_mergers = []
         for merger_class in [ImageMergeMerger, PILMerger]:
             if merger_class.available():
-                self.image_merger = merger_class(self)
-                break
+                self.image_mergers.append(merger_class(self))
  
     def _loadFromSection (cls, config, section, module, **objargs):
         type  = config.get(section, "type")
@@ -277,12 +290,22 @@ class Service (object):
                 [self.expireTile(t) for t in tiles]
                 return ('text/plain', 'OK')
             else:
-                assert len(tiles)> 0, "No tiles to merge"
-                if not self.image_merger:
+                assert len(tiles) > 0, "No tiles to merge"
+
+                if len(self.image_mergers) == 0:
                     raise Exception("You need either python-image-merge or "
                                     "Python Imaging Library for combining "
                                     "multiple layers")
-                return self.image_merger.merge(tiles, params)
+
+                merger = self.image_mergers[0]
+                # Select the first preferred one if there are more than one
+                # image merger.
+                if len(self.image_mergers) > 0:
+                    for m in self.image_mergers:
+                        if m.preferred(tiles, params):
+                            merger = m
+                            break
+                return merger.merge(tiles, params)
         else:
             return (tile.format, tile.data)
 
