@@ -8,7 +8,7 @@ class AWSS3(Cache):
 
     default_structure = 's3'
     
-    def __init__ (self, access_key, secret_access_key, bucket_name=None, location='', policy=None, **kwargs):
+    def __init__ (self, access_key, secret_access_key, bucket_name=None, location='', policy=None, max_age=None, **kwargs):
         Cache.__init__(self, **kwargs)
         if policy in s3.acl.CannedACLStrings:
             self.policy = policy
@@ -21,7 +21,12 @@ class AWSS3(Cache):
         if not self.bucket:
             self.bucket = self.cache.create_bucket(self.bucket_name, location=location)
             self.bucket.set_acl(self.policy)
-    
+
+        if max_age is not None:
+            self.cache_control = {"Cache-Control": "public, max-age=%d"%(int(max_age))}
+        else:
+            self.cache_control = {}
+
     def getBotoKey(self, key):
         boto_key = s3.key.Key(self.bucket)
         boto_key.key = key
@@ -49,7 +54,9 @@ class AWSS3(Cache):
     
     def setObject(self, key, data, mime_type='application/octet-stream'):
         key = self.getBotoKey(key)
-        key.set_contents_from_string(data, headers={'Content-Type': mime_type})
+        headers = {'Content-Type': mime_type}
+        headers.update(self.cache_control)
+        key.set_contents_from_string(data, headers=headers
         key.set_acl(self.policy)
     
     def delete(self, tile):
