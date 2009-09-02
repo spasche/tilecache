@@ -33,8 +33,7 @@ class AWSS3(Cache):
         return boto_key
 
     def get(self, tile):
-        key = self.getKey(tile)
-        tile.data = self.getObject(key)
+        tile.data = self.getObject(self.getKey(tile))
         return tile.data
     
     def getObject(self, key):
@@ -60,8 +59,7 @@ class AWSS3(Cache):
     
     def delete(self, tile):
         if not self.readonly:
-            key = self.getKey(tile)
-            self.deleteObject(key)
+            self.deleteObject(self.getKey(tile))
     
     def deleteObject(self, key):
         self.getBotoKey(key).delete()
