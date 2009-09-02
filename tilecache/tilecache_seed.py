@@ -56,6 +56,8 @@ def main():
                  skip_empty=options.skip_empty, padding=options.padding,
                  force = options.force, reverse = options.reverse)
 
+    svc.teardown()
+                
 if __name__ == "__main__":
     main()
 #     # see http://docs.python.org/library/profile.html

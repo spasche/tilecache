@@ -94,3 +94,6 @@ class Cache (object):
     
     def delete(self, tile):
         raise NotImplementedError()
+
+    def teardown(self):
+        pass

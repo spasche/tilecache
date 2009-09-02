@@ -134,6 +134,9 @@ class Service (object):
         for merger_class in [ImageMergeMerger, PILMerger]:
             if merger_class.available():
                 self.image_mergers.append(merger_class(self))
+
+    def teardown(self):
+        self.cache.teardown()
  
     def _loadFromSection (cls, config, section, module, **objargs):
         type  = config.get(section, "type")
