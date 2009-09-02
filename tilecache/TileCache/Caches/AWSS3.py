@@ -48,16 +48,15 @@ class AWSS3(Cache):
         if self.readonly and not force:
             return data
         else:
-            key = self.getKey(tile)
-            self.setObject(key, data, tile.layer.mime_type)
+            self.setObject(self.getKey(tile), data, tile.layer.mime_type)
             return data
     
     def setObject(self, key, data, mime_type='application/octet-stream'):
-        key = self.getBotoKey(key)
+        boto_key = self.getBotoKey(key)
         headers = {'Content-Type': mime_type}
         headers.update(self.cache_control)
-        key.set_contents_from_string(data, headers=headers)
-        key.set_acl(self.policy)
+        boto_key.set_contents_from_string(data, headers=headers)
+        boto_key.set_acl(self.policy)
     
     def delete(self, tile):
         if not self.readonly:
