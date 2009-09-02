@@ -64,6 +64,7 @@ Example configuration::
   bucket_name=mybucketname
   policy=public-read
   location=EU
+  max_age=22222222
 
 Use bucket_name if you need to name your bucket. If the property is left over,
 TileCache will generate a name based on your access key.
@@ -75,6 +76,11 @@ values are 'private', 'public-read', 'public-read-write' or
 
 location set the bucket location. Possible value is 'EU'. The default is to
 store the bucket in the US.
+
+max_age is used to set the Cache-Control header, if max_age is set to 42, the
+header will be:
+  "Cache-Control: public, max-age=42"
+If not set, no Cache-Control is send to s3.
 
 Dependencies:
   This cache uses the boto libraries available from
