@@ -1,7 +1,7 @@
  * TileCache.Service: 
    * sand an HTTP 204 when not tiles are available (already done 
      for the mod_python handler)
-   * remove the DELETE method.
+   * [done] remove the DELETE method.
  * TileCache.Services.WMS, convert the file format if needed (with IE, the user
    will request the file as image/gif)
  * [done] move the ImageMerger classes into TileCache.Utils

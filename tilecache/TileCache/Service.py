@@ -156,17 +156,6 @@ class Service (object):
 
         return (layer.mime_type, image)
 
-    def expireTile (self, tile):
-        bbox  = tile.bounds()
-        layer = tile.layer 
-        for z in range(len(layer.resolutions)):
-            bottomleft = layer.getClosestCell(z, bbox[0:2])
-            topright   = layer.getClosestCell(z, bbox[2:4])
-            for y in range(bottomleft[1], topright[1] + 1):
-                for x in range(bottomleft[0], topright[0] + 1):
-                    coverage = Tile(layer,x,y,z)
-                    self.cache.delete(coverage)
-
     def dispatchRequest (self, params, path_info="/", req_method="GET", host="http://example.com/"):
         if self.metadata.has_key('exception'):
             raise TileCacheException("%s\n%s" % (self.metadata['exception'], self.metadata['traceback']))
@@ -207,33 +196,25 @@ class Service (object):
             tile = TMS(self).parse(params, path_info, host)
         
         if isinstance(tile, Layer.Tile):
-            if req_method == 'DELETE':
-                self.expireTile(tile)
-                return ('text/plain', 'OK')
-            else:
-                return self.renderTile(tile, params.has_key('FORCE'))
+            return self.renderTile(tile, params.has_key('FORCE'))
         elif isinstance(tile, list):
             tiles = tile
-            if req_method == 'DELETE':
-                [self.expireTile(t) for t in tiles]
-                return ('text/plain', 'OK')
-            else:
-                assert len(tiles) > 0, "No tiles to merge"
+            assert len(tiles) > 0, "No tiles to merge"
 
-                if len(self.image_mergers) == 0:
-                    raise Exception("You need either python-image-merge or "
-                                    "Python Imaging Library for combining "
-                                    "multiple layers")
+            if len(self.image_mergers) == 0:
+                raise Exception("You need either python-image-merge or "
+                                "Python Imaging Library for combining "
+                                "multiple layers")
 
-                merger = self.image_mergers[0]
-                # Select the first preferred one if there are more than one
-                # image merger.
-                if len(self.image_mergers) > 0:
-                    for m in self.image_mergers:
-                        if m.preferred(tiles, params):
-                            merger = m
-                            break
-                return merger.merge(tiles, params)
+            merger = self.image_mergers[0]
+            # Select the first preferred one if there are more than one
+            # image merger.
+            if len(self.image_mergers) > 0:
+                for m in self.image_mergers:
+                    if m.preferred(tiles, params):
+                        merger = m
+                        break
+            return merger.merge(tiles, params)
         else:
             return (tile.format, tile.data)
 
