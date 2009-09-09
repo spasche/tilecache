@@ -8,3 +8,4 @@
  * Add a post-render-tile hook (can be used to optimize png files)
  * TileCache.Caches.AWSS3: add a local disk cache. should take the max-age into account.
    maybe a LRU with a max size or max object count.
+ * mode_python: send the content-length
