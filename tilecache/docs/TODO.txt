@@ -2,4 +2,4 @@
  * done for the mod_python handler)
  * TileCache.Services.WMS, convert the file format if needed (with IE, the user
    will request the file as image/gif)
- * move the ImageMerger classes into TileCache.Utils
+ * [done] move the ImageMerger classes into TileCache.Utils
