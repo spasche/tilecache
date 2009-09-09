@@ -1,3 +1,4 @@
+import os
 try:
     import cStringIO as StringIO
 except ImportError:
