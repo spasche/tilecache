@@ -1,4 +1,4 @@
-tilecache (r391~c2c-git20090909) unstable; urgency=low
+tilecache (r391~c2c2-git20090909) unstable; urgency=low
 
   * code refactoring.
   * AWSS3: 
