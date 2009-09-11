@@ -26,7 +26,7 @@ def main():
                       "will be created, but some tiles may be wholly outside your bbox")
     parser.add_option("-r","--reverse", action="store_true", dest="reverse", default = False,
                       help="Reverse order of seeding tiles")
-    parser.add_option("-a", "--all", action="store_true", dest="skip_empty", default = True,
+    parser.add_option("-a", "--all", action="store_false", dest="skip_empty", default = True,
                       help="Generate all the tiles, the default is to skip the empty tiles if the "+
                       "layer is a vector and mapserver layer.")
 
