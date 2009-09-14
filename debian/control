@@ -10,7 +10,7 @@ Homepage: http://tilecache.org/
 
 Package: tilecache
 Architecture: all
-Depends: ${python:Depends}, python-boto
+Depends: ${python:Depends}, imagemagick, python-boto
 Recommends: python-imaging, python-image-merge
 Suggests: python-mapscript (>= 4.10), python-mapnik, memcached, python-memcache, python-flup, python-paste, python-wsgiref, python-simplejson
 Description: a web map tile caching system
