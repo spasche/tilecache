@@ -196,7 +196,12 @@ class Service (object):
             tile = TMS(self).parse(params, path_info, host)
         
         if isinstance(tile, Layer.Tile):
-            return self.renderTile(tile, params.has_key('FORCE'))
+            # <shameful part>
+            # was:
+            #return self.renderTile(tile, params.has_key('FORCE'))
+            format, data = self.renderTile(tile, params.has_key('FORCE'))
+            return (format, postprocess(data, format, params))
+            # </shameful part>
         elif isinstance(tile, list):
             tiles = tile
             assert len(tiles) > 0, "No tiles to merge"
@@ -214,9 +219,44 @@ class Service (object):
                     if m.preferred(tiles, params):
                         merger = m
                         break
-            return merger.merge(tiles, params)
+            # <shameful part>
+            # was:
+            #return merger.merge(tiles, params)
+            format, data = merger.merge(tiles, params)
+            return (format, postprocess(data, format, params))
+            # </shameful part>
         else:
+            # text (xml, json, ...) output
             return (tile.format, tile.data)
+
+# <shameful part>
+# On the fly image conversion.
+# Only here because IE <= 6.0 can't handle RGBA png.
+def postprocess(data, format, params):
+    if params.has_key('FORMAT'):
+        request_format = params['FORMAT'].lower()
+    else:
+        request_format = format
+
+    request_extension = request_format.split('/')[1]    
+    if request_extension not in format:
+        from tempfile import mkstemp
+        import os
+        (inhandle, inpath) = mkstemp()
+        os.write(inhandle, data)
+        os.close(inhandle)
+        
+        outfile = inpath + '.' + request_extension
+        os.system('convert %s %s' % (inpath, outfile))
+        data = file(outfile, 'rb').read()
+        
+        os.remove(inpath)
+        os.remove(outfile)
+
+        return data
+    else:
+        return data
+# </shameful part>
 
 def modPythonHandler (apacheReq, service):
     from mod_python import apache, util
