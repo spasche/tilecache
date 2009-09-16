@@ -2,10 +2,15 @@
    * sand an HTTP 204 when not tiles are available (already done 
      for the mod_python handler)
    * [done] remove the DELETE method.
- * TileCache.Services.WMS, convert the file format if needed (with IE, the user
+ * [done] TileCache.Service, convert the file format if needed (with IE, the user
    will request the file as image/gif)
  * [done] move the ImageMerger classes into TileCache.Utils
  * Add a post-render-tile hook (can be used to optimize png files)
  * TileCache.Caches.AWSS3: add a local disk cache. should take the max-age into account.
    maybe a LRU with a max size or max object count.
  * mode_python: send the content-length
+ * TileCache.Utils.MapScript.raster_shapes: handle raster layer without tileindex (only data)
+ * TileCache.Utils.MapScript.tiles: may crash with raster layers: 'done' will be too big
+
+
+
