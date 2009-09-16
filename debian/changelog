@@ -1,3 +1,10 @@
+tilecache (r391~c2c2-git20090915) lenny; urgency=low
+
+  * on the fly image conversion.
+  * depends on imagemagick.
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Tue, 15 Sep 2009 15:29:19 +0200
+
 tilecache (r391~c2c2-git20090909) unstable; urgency=low
 
   * code refactoring.
