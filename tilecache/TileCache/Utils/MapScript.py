@@ -1,5 +1,5 @@
 import os
-from osgeo import ogr
+from osgeo import ogr, gdal
 import mapscript
 from TileCache.Layer import MetaTile
 
@@ -40,23 +40,36 @@ def vector_shapes(layerObj, extent=None):
     return shapes
 
 def raster_shapes(layerObj, extent=None):
-    tileindex = os.path.join(layerObj.map.shapepath, layerObj.tileindex + ".shp")
-    ds = ogr.Open(tileindex)
-    layer = ds.GetLayerByIndex(0)
-    layer.ResetReading()
+    if layerObj.tileindex is None:
+        # no tileindex, use DATA
+        filename = os.path.join(layerObj.map.shapepath, layerObj.data)
+        layer = gdal.Open(filename, gdal.GA_ReadOnly)
 
-    if extent is not None:
-        layer.SetSpatialFilterRect(*extent)
+        geotransform = layer.GetGeoTransform()
+        minx = geotransform[0]
+        maxy = geotransform[3]
+        miny = maxy + layer.RasterYSize * geotransform[5]
+        maxx = minx + layer.RasterXSize * geotransform[1]
 
-    tiles = []
-    tile = layer.GetNextFeature()
-    while tile:
-        minx, maxx, miny, maxy = tile.GetGeometryRef().GetEnvelope() # WTF ?
-        tiles.append(mapscript.rectObj(minx, miny, maxx, maxy).toPolygon())
+        return [mapscript.rectObj(minx, miny, maxx, maxy).toPolygon()]
+    else:
+        filename = os.path.join(layerObj.map.shapepath, layerObj.filename + ".shp")
+        ds = ogr.Open(filename)
+        layer = ds.GetLayerByIndex(0)
+        layer.ResetReading()
+
+        if extent is not None:
+            layer.SetSpatialFilterRect(*extent)
+
+        tiles = []
         tile = layer.GetNextFeature()
-    ds.Destroy()
+        while tile:
+            minx, maxx, miny, maxy = tile.GetGeometryRef().GetEnvelope() # WTF ?
+            tiles.append(mapscript.rectObj(minx, miny, maxx, maxy).toPolygon())
+            tile = layer.GetNextFeature()
+        ds.Destroy()
 
-    return tiles
+        return tiles
 
 def intersects(shapeObj, rectObj):
     """ return whatever 'shapeObj' and 'rectObj' intersect """
