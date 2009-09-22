@@ -1,3 +1,9 @@
+tilecache (r391~c2c2-git20090922) lenny; urgency=low
+
+  * seed: support raster layers without tileindex
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Tue, 22 Sep 2009 12:28:05 +0200
+
 tilecache (r391~c2c2-git20090915) lenny; urgency=low
 
   * on the fly image conversion.
