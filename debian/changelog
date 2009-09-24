@@ -1,3 +1,9 @@
+tilecache (r391~c2c2-git20090924) lenny; urgency=low
+
+  * TileCache.Utils.MapScript: correctly build the tileindex file
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Thu, 24 Sep 2009 09:00:41 +0200
+
 tilecache (r391~c2c2-git20090922) lenny; urgency=low
 
   * seed: support raster layers without tileindex
