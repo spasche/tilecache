@@ -53,7 +53,7 @@ def raster_shapes(layerObj, extent=None):
 
         return [mapscript.rectObj(minx, miny, maxx, maxy).toPolygon()]
     else:
-        filename = os.path.join(layerObj.map.shapepath, layerObj.filename + ".shp")
+        filename = os.path.join(layerObj.map.shapepath, layerObj.tileindex + ".shp")
         ds = ogr.Open(filename)
         layer = ds.GetLayerByIndex(0)
         layer.ResetReading()
