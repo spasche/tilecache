@@ -44,11 +44,9 @@ class AWSS3(Cache):
         return data
         
     def set(self, tile, data, force=False):
-        if self.readonly and not force:
-            return data
-        else:
+        if not self.readonly or force:
             self.setObject(self.getKey(tile), data, tile.layer.mime_type)
-            return data
+        return data
     
     def setObject(self, key, data, mime_type='application/octet-stream'):
         boto_key = self.getBotoKey(key)
