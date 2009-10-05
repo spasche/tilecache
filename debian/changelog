@@ -1,3 +1,9 @@
+tilecache (r391~c2c2-git20091009) lenny; urgency=low
+
+  * back to the plain old dict for the already-generated-tiles structure.
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 05 Oct 2009 15:17:41 +0200
+
 tilecache (r391~c2c2-git20091008) lenny; urgency=low
 
   * pass the tile to the unlock function

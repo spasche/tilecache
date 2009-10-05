@@ -1,5 +1,4 @@
 import os
-from collections import deque
 from struct import pack
 from osgeo import ogr, gdal
 import mapscript
@@ -88,13 +87,14 @@ def getLayersByName(mapObj, name):
 
 def tiles(layersObj, tcLayer, bbox=None, levels=None):
     """ yield all non empty tiles indexes (x, y, z) """
-    fmt = '3i'
-    done = deque()
+    pad = pack('x')
+    done = {}
     for layerObj in layersObj:
         for shapeObj in shapes(layerObj, bbox):
             for x, y, z in tcLayer.range(shapeObj.bounds, levels):
-                if pack(fmt, x, y, z) not in done:
+                key = pack('3i', x, y, z)
+                if key not in done:
                     tile = MetaTile(tcLayer, x, y, z)
                     if intersects(shapeObj, tile.bounds()):
-                        done.append(pack(fmt, x, y, z))
+                        done[key] = pad
                         yield layerObj, shapeObj, x, y, z
