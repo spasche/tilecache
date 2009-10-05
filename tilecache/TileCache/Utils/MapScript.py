@@ -1,4 +1,5 @@
 import os
+import numpy
 from osgeo import ogr, gdal
 import mapscript
 from TileCache.Layer import MetaTile
@@ -86,12 +87,12 @@ def getLayersByName(mapObj, name):
 
 def tiles(layersObj, tcLayer, bbox=None, levels=None):
     """ yield all non empty tiles indexes (x, y, z) """
-    done = []
+    done = numpy.array([-1, -1, -1], ndmin=2, dtype=int)
     for layerObj in layersObj:
         for shapeObj in shapes(layerObj, bbox):
             for x, y, z in tcLayer.range(shapeObj.bounds, levels):
-                if (x, y, z) not in done:
+                if [x, y, z] not in done:
                     tile = MetaTile(tcLayer, x, y, z)
                     if intersects(shapeObj, tile.bounds()):
-                        done.append((x, y, z))
+                        done = numpy.append(done, [[x, y, z]], axis=0)
                         yield layerObj, shapeObj, x, y, z
