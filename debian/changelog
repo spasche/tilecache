@@ -1,3 +1,10 @@
+tilecache (r391~c2c2-git20091005) lenny; urgency=low
+
+  * use numpy for faster array manipulation.
+  * add debian/conffiles
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 05 Oct 2009 09:10:38 +0200
+
 tilecache (r391~c2c2-git20090924) lenny; urgency=low
 
   * TileCache.Utils.MapScript: correctly build the tileindex file
