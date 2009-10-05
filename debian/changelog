@@ -1,3 +1,9 @@
+tilecache (r391~c2c2-git20091008) lenny; urgency=low
+
+  * pass the tile to the unlock function
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 05 Oct 2009 14:17:45 +0200
+
 tilecache (r391~c2c2-git20091007) lenny; urgency=low
 
   * pack the coordinates and store them into a deque
