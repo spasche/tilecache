@@ -6,7 +6,12 @@ import TileCache.Layer as Layer
 class TMS (Request):
     def parse (self, fields, path, host):
         # /1.0.0/global_mosaic/0/0/0.jpg
-        parts = filter( lambda x: x != "", path.split("/") )
+        parts = [part for part in path.split("/") if part != '']
+        if parts[0] != '1.0.0' and len(parts) == 8:
+            # the request is a disk request (from an OpenLayers.Layer.TileCache layer)
+            # transform it to a TMS request
+            parts = self.disk2tms(parts)
+        
         if not host[-1] == "/": host = host + "/"
         if len(parts) < 1:
             return self.serverCapabilities(host)
@@ -32,6 +37,15 @@ class TMS (Request):
                     tile  = Layer.Tile(layer, int(parts[3]), int(parts[4]), int(parts[2]))
                 return tile
 
+    def disk2tms(self, parts):
+        z = int(parts[1])
+        x0, x1, x2, y0, y1 = parts[2:7]
+        y2, extension = parts[7].split('.')
+
+        x = int(x0) * 1000000 + int(x1) * 1000 + int(x2)
+        y = int(y0) * 1000000 + int(y1) * 1000 + int(y2)
+        return ['1.0.0', parts[0], str(z), str(x), '.'.join([str(y), extension])]
+    
     def serverCapabilities (self, host):
         return Capabilities("text/xml", """<?xml version="1.0" encoding="UTF-8" ?>
             <Services>

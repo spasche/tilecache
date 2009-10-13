@@ -227,6 +227,7 @@ class Service (object):
             # </shameful part>
         else:
             # text (xml, json, ...) output
+            # FIXME: possible bug here: this is not a tile instance so no format and data attributes
             return (tile.format, tile.data)
 
 # <shameful part>
