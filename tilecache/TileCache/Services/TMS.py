@@ -7,7 +7,7 @@ class TMS (Request):
     def parse (self, fields, path, host):
         # /1.0.0/global_mosaic/0/0/0.jpg
         parts = [part for part in path.split("/") if part != '']
-        if parts[0] != '1.0.0' and len(parts) == 8:
+        if len(parts) == 8 and parts[0] != '1.0.0':
             # the request is a disk request (from an OpenLayers.Layer.TileCache layer)
             # transform it to a TMS request
             parts = self.disk2tms(parts)
