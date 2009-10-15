@@ -20,6 +20,8 @@ def main():
                       help="force recreation of tiles even if they are already in cache")
     parser.add_option("-b","--bbox",action="store", type="string", dest="bbox", default = None,
                       help="restrict to specified bounding box")
+    parser.add_option("-c","--config", action="store", type="string", dest="tilecacheconfig",
+                      help="path to configuration file")
     parser.add_option("-p","--padding",action="store", type="int", dest="padding", default = 0,
                       help="extra margin tiles to seed around target area. Defaults to 0 "+
                       "(some edge tiles might be missing).      A value of 1 ensures all tiles "+
@@ -35,7 +37,11 @@ def main():
     if len(args) > 3:
         parser.error("Incorrect number of arguments. bbox and padding are now options (-b and -p)")
 
-    svc = Service.load(*cfgfiles)
+    cfgs = cfgfiles
+    if options.tilecacheconfig:
+        cfgs = cfgs + (options.tilecacheconfig,)
+        
+    svc = Service.load(*cfgs)
     layer = svc.layers[args[0]]
 
     if options.bbox:
