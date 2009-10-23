@@ -87,6 +87,12 @@ class MetaTile (Tile):
         return ( actual[0] + self.layer.metaBuffer[0] * 2, 
                  actual[1] + self.layer.metaBuffer[1] * 2 )
 
+    def bufferbounds(self):
+        """ returns the tile bounds plus the meta buffer but without the meta size. """
+        minx, miny, maxx, maxy = Tile.bounds(self)
+        xbuffer, ybuffer = self.layer.getMetaBufferSize(self.z)
+        return minx - xbuffer, miny - ybuffer, maxx + xbuffer, maxy + ybuffer
+
     def bounds (self):
         tilesize   = self.actualSize()
         res        = self.layer.resolutions[self.z]
