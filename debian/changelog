@@ -1,11 +1,12 @@
 tilecache (r391~c2c2-git20091013) lenny; urgency=low
 
-  * NOT RELEASED
   * back to the plain old dict for the already-generated-tiles structure.
   * handle "disk like" requests (from OpenLayers.Layer.TileCache).
   * tilecache_seed.py: additional config files via the new -c option
+  * TileCache.Utils.MapScript.tiles: don't take the metaSize into account but
+    only the metaBuffer.
 
- -- Frederic Junod <frederic.junod@camptocamp.com>  Thu, 15 Oct 2009 14:16:53 +0200
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 23 Oct 2009 11:01:43 +0200
 
 tilecache (r391~c2c2-git20091008) lenny; urgency=low
 
