@@ -1,6 +1,7 @@
 import mapscript
 import time
 from TileCache.Utils.MapScript import getLayersByName, tiles
+from TileCache.Layers.MapServer import MapServer
 from TileCache.Layer import Tile
 
 def seed(service, layer, levels=None, bbox=None, skip_empty=True, padding=0, force=False, reverse=False):
@@ -13,12 +14,11 @@ def seed(service, layer, levels=None, bbox=None, skip_empty=True, padding=0, for
     if bbox is None:
         bbox = layer.bbox
 
-    if skip_empty and hasattr(layer, 'mapfile'):
+    if skip_empty and isinstance(layer, MapServer):
         # a mapserver layer
-        mapObj = mapscript.mapObj(layer.mapfile)
         layersObj = []
         for layerName in layer.layers.split(','):
-            layersObj.extend(getLayersByName(mapObj, layerName))
+            layersObj.extend(getLayersByName(layer.mapObj, layerName))
 
         # metaSize, reverse, padding not managed
         for layerObj, shapeObj, x, y, z in tiles(layersObj, layer, bbox, levels):
