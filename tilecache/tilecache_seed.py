@@ -5,6 +5,7 @@
    README file or man page for details."""
 
 import sys
+import fnmatch
 from optparse import OptionParser
 
 from TileCache.Seed import seed
@@ -42,7 +43,6 @@ def main():
         cfgs = cfgs + (options.tilecacheconfig,)
         
     svc = Service.load(*cfgs)
-    layer = svc.layers[args[0]]
 
     if options.bbox:
         bboxlist = map(float, options.bbox.split(","))
@@ -50,18 +50,16 @@ def main():
         bboxlist = None
 
     if len(args) > 1:
-        seed(svc, layer, levels=map(int, args[1:3]), bbox=bboxlist,
+        levels = map(int, args[1:3])
+    else:
+        # not level given, generate all
+        levels = None            
+
+    for key in fnmatch.filter(svc.layers.keys(), args[0]):
+        seed(svc, svc.layers[key], levels=levels, bbox=bboxlist,
              skip_empty=options.skip_empty, padding=options.padding,
              force = options.force, reverse = options.reverse)
-    else:
-        for line in sys.stdin.readlines():
-            lat, lon, delta = map(float, line.split(","))
-            bbox = (lon - delta, lat - delta, lon + delta, lat + delta)
-            print "===> %s <===" % (bbox,)
-            seed(svc, layer, bbox=bbox,
-                 skip_empty=options.skip_empty, padding=options.padding,
-                 force = options.force, reverse = options.reverse)
-
+        
     svc.teardown()
                 
 if __name__ == "__main__":
