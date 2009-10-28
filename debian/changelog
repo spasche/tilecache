@@ -1,11 +1,11 @@
-tilecache (r391~c2c2-git20091014) lenny; urgency=low
+tilecache (r391~c2c2-git20091028) lenny; urgency=low
 
-  * NOT RELEASED
   * Seed: use the TileCache.Layers.MapServer.mapObj attribute.
   * tilecache_seed: shell-style wildcards can be used for the layer name.
   * tilecache_seed: if no levels are given, generate all.
+  * tilecache_seed: use the MetaTile not the simple Tile.
 
- -- Frederic Junod <frederic.junod@camptocamp.com>  Tue, 27 Oct 2009 11:37:36 +0100
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Wed, 28 Oct 2009 12:10:46 +0100
 
 tilecache (r391~c2c2-git20091013) lenny; urgency=low
 
