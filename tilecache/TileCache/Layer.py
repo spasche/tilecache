@@ -70,6 +70,10 @@ class Tile (object):
         """
         return ",".join(map(str, self.bounds()))
 
+    def __repr__(self):
+        return "<TileCache.Layer.Tile '%s' (x: %d, y: %d, z: %d)>"%(self.layer.name, self.x, self.y, self.z)
+
+
 class MetaTile (Tile):
     def actualSize (self):
         """
