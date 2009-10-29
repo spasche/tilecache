@@ -468,13 +468,13 @@ class MetaLayer (Layer):
                 maxy = metaHeight - (j * self.size[1] + self.metaBuffer[1])
                 miny = maxy - self.size[1]
                 subimage = image.crop((minx, miny, maxx, maxy))
-                buffer = StringIO.StringIO()
+                buf = StringIO.StringIO()
                 if image.info.has_key('transparency'): 
-                    subimage.save(buffer, self.extension, transparency=image.info['transparency'])
+                    subimage.save(buf, self.extension, transparency=image.info['transparency'])
                 else:
-                    subimage.save(buffer, self.extension)
-                buffer.seek(0)
-                subdata = buffer.read()
+                    subimage.save(buf, self.extension)
+                buf.seek(0)
+                subdata = buf.read()
                 x = metatile.x * self.metaSize[0] + i
                 y = metatile.y * self.metaSize[1] + j
                 subtile = Tile( self, x, y, metatile.z )
