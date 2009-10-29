@@ -452,7 +452,7 @@ class MetaLayer (Layer):
         y = int(tile.y / self.metaSize[1])
         return MetaTile(self, x, y, tile.z) 
 
-    def renderMetaTile (self, metatile, tile, subtiles=True):
+    def renderMetaTile (self, metatile, tile):
         import Image
 
         data = self.renderTile(metatile)
@@ -480,7 +480,7 @@ class MetaLayer (Layer):
                 subtile = Tile( self, x, y, metatile.z )
                 if self.watermarkimage:
                     subdata = self.watermark(subdata)
-                self.cache.set(subtile, subdata)
+                self.cache.set(subtile, subdata, force=True)
                 if x == tile.x and y == tile.y:
                     tile.data = subdata
 
