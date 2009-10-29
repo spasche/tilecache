@@ -95,6 +95,7 @@ def tiles(layersObj, tcLayer, bbox=None, levels=None):
                 key = pack('3i', x, y, z)
                 if key not in done:
                     tile = MetaTile(tcLayer, x, y, z)
+                    # FIXME: handle metaSize
                     if intersects(shapeObj, tile.bufferbounds()):
                         done[key] = pad
                         yield layerObj, shapeObj, x, y, z

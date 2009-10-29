@@ -38,6 +38,10 @@ class Tile (object):
         self.z = z
         self.data = None
 
+#     @property
+#     def coords(self):
+#         return [(self.x, self.y, self.z)]
+
     def size (self):
         """
         >>> l = Layer("name", maxresolution=0.019914, size="256,256")
@@ -108,6 +112,21 @@ class MetaTile (Tile):
         maxx = minx + metaWidth  + 2 * buffer[0]
         maxy = miny + metaHeight + 2 * buffer[1]
         return (minx, miny, maxx, maxy)
+
+#     @property
+#     def coords(self):
+#         coords = []
+#         metaCols, metaRows = self.layer.getMetaSize(self.z)
+#         metaWidth, metaHeight = self.layer.metaSize
+#         metatile = self.layer.getMetaTile(self)
+
+#         for i in range(metaCols):
+#             for j in range(metaRows):
+#                 coords.append((metatile.x * metaWidth + i,
+#                                metatile.y * metaHeight + j, metatile.z))
+                                
+#         return coords
+
 
 class Layer (object):
     __slots__ = ( "name", "layers", "bbox", "data_extent", 
