@@ -2,7 +2,7 @@ import mapscript
 import time
 from TileCache.Utils.MapScript import getLayersByName, tiles
 from TileCache.Layers.MapServer import MapServer
-from TileCache.Layer import MetaTile
+from TileCache.Layer import Tile
 
 def seed(service, layer, levels=None, bbox=None, skip_empty=True, padding=0, force=False, reverse=False):
     if levels is None:
@@ -23,7 +23,7 @@ def seed(service, layer, levels=None, bbox=None, skip_empty=True, padding=0, for
         # metaSize, reverse, padding not managed
         for layerObj, shapeObj, x, y, z in tiles(layersObj, layer, bbox, levels):
             start = time.time()
-            tile = MetaTile(layer, x, y, z)
+            tile = Tile(layer, x, y, z)
             service.renderTile(tile, force=force)
             print "['%s'] (x: %04d, y: %04d, z: %04d) in %4fs"%(layer.name, x, y, z, time.time() - start)
 
@@ -47,6 +47,6 @@ def seed(service, layer, levels=None, bbox=None, skip_empty=True, padding=0, for
             for y in range(starty, endy, metay):
                 for x in range(startx, endx, metax):
                     start = time.time()
-                    tile = MetaTile(layer, x, y, z)
+                    tile = Tile(layer, x, y, z)
                     service.renderTile(tile, force=force)
                     print "['%s'] (x: %04d, y: %04d, z: %04d) in %4fs"%(layer.name, x, y, z, time.time() - start)
