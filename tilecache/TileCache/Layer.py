@@ -452,7 +452,7 @@ class MetaLayer (Layer):
         y = int(tile.y / self.metaSize[1])
         return MetaTile(self, x, y, tile.z) 
 
-    def renderMetaTile (self, metatile, tile):
+    def renderMetaTile (self, metatile, tile, subtiles=True):
         import Image
 
         data = self.renderTile(metatile)
