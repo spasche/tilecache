@@ -1,3 +1,10 @@
+tilecache (r391~c2c2-git20091029) lenny; urgency=low
+
+  * NOT RELEASED
+  * the Test cache is never readonly.
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 30 Oct 2009 10:31:25 +0100
+
 tilecache (r391~c2c2-git20091028) lenny; urgency=low
 
   * Seed: use the TileCache.Layers.MapServer.mapObj attribute.
