@@ -1,8 +1,9 @@
 tilecache (r391~c2c2-git20091130) lenny; urgency=low
 
   * mod_python: use the correct path_info when the request is redirected.
+  * round the x and y coord
 
- -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 30 Nov 2009 10:16:09 +0100
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 30 Nov 2009 10:32:48 +0100
 
 tilecache (r391~c2c2-git20091030) lenny; urgency=low
 
