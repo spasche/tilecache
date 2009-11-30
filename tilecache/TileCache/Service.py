@@ -262,14 +262,19 @@ def postprocess(data, format, params):
 def modPythonHandler (apacheReq, service):
     from mod_python import apache, util
     try:
+        if apacheReq.prev:
+            path_info = apacheReq.prev.uri
+        else:
+            path_info = apacheReq.path_info
+        
         if apacheReq.headers_in.has_key("X-Forwarded-Host"):
             host = "http://" + apacheReq.headers_in["X-Forwarded-Host"]
         else:
             host = "http://" + apacheReq.headers_in["Host"]
-        host += apacheReq.uri[:-len(apacheReq.path_info)]
+        host += apacheReq.uri[:-len(path_info)]
         format, image = service.dispatchRequest( 
                                 util.FieldStorage(apacheReq), 
-                                apacheReq.path_info,
+                                path_info,
                                 apacheReq.method,
                                 host )
         apacheReq.content_type = format
