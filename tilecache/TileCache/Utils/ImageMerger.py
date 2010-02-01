@@ -85,7 +85,7 @@ class PILMerger(ImageMerger):
                 if self.USE_SLOW_BUT_CORRECT_COMPOSITING:
                     result = self._compose(result, image)
                 else:
-                result.paste(image, None, image)
+                    result.paste(image, None, image)
 
         if result is None:
             return (format, None)
