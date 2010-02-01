@@ -212,13 +212,6 @@ class Service (object):
                                 "multiple layers")
 
             merger = self.image_mergers[0]
-            # Select the first preferred one if there are more than one
-            # image merger.
-            if len(self.image_mergers) > 0:
-                for m in self.image_mergers:
-                    if m.preferred(tiles, params):
-                        merger = m
-                        break
             # <shameful part>
             # was:
             #return merger.merge(tiles, params)

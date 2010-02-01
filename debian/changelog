@@ -1,3 +1,9 @@
+tilecache (r391~c2c2-git20100201) lenny; urgency=low
+
+  * Alpha compose in image merger.
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Mon, 01 Feb 2010 12:14:36 +0100
+
 tilecache (r391~c2c2-git20091130) lenny; urgency=low
 
   * mod_python: use the correct path_info when the request is redirected.

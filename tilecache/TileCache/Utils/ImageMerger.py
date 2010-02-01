@@ -1,4 +1,5 @@
 import os
+import sys
 try:
     import cStringIO as StringIO
 except ImportError:
@@ -10,11 +11,6 @@ class ImageMerger:
     def __init__ (self, service):
         self.service = service
 
-    def preferred(self, tiles, params):
-        """Override this method and return False is this module may not be
-           the best option for the given parameters"""
-        return True
-
 class ImageMergeMerger(ImageMerger):
     @staticmethod
     def available():
@@ -25,16 +21,6 @@ class ImageMergeMerger(ImageMerger):
         except ImportError:
             return False
         return True
-
-    def preferred(self, tiles, params):
-        # Empirical measurements have determined than PIL is faster when merging
-        # a small number of layers. So this module shouldn't be the preferred
-        # one in that case.
-        # This number has been calculed by on a 64-bit Debian system.
-        # Note that results are different when running on a 32-bit system.
-        IMAGE_MERGE_TILES_THRESHOLD = 5
-
-        return len(tiles) > IMAGE_MERGE_TILES_THRESHOLD
 
     def merge(self, tiles, params):
         import image_merge
@@ -49,6 +35,13 @@ class ImageMergeMerger(ImageMerger):
         return (format, image_merge.merge(*images))
 
 class PILMerger(ImageMerger):
+    # The default behavior of the PILMerger doesn't use the same composition
+    # algorithm as Mapserver, which can change colors of merged images.
+    # PIL doesn't expose a composition algorithm which does what we need, so
+    # the correct implementation is pure Python which can be very slow and is
+    # not enabled by default.
+    USE_SLOW_BUT_CORRECT_COMPOSITING = False
+
     @staticmethod
     def available():
         try:
@@ -56,6 +49,27 @@ class PILMerger(ImageMerger):
         except ImportError:
             return False
         return True
+
+    def _compose(self, img1, img2):
+        """Alpha compositing using associative approach."""
+        import PIL.Image as Image
+        assert img1.size == img2.size
+        assert img1.mode == "RGBA"
+        assert img2.mode == "RGBA"
+        img1_data = img1.getdata()
+        img2_data = img2.getdata()
+        result_data = []
+        for p1, p2 in zip(img1_data, img2_data):
+            a1 = p1[3] / 255.0
+            a2 = p2[3] / 255.0
+            a = a1 + a2 * (1.0 - a1)
+            m = sys.maxint if a == 0 else 1. / a
+            r = [int((v1 * a1 + v2 * a2 * (1.0 - a1)) * m) for (v1, v2) in zip(p1[:3], p2[:3])]
+            r.append(int(a * 255))
+            r = tuple(r)
+            result_data.append(r)
+        img1.putdata(result_data)
+        return img1
 
     def merge(self, tiles, params):
         import PIL.Image as Image
@@ -68,6 +82,9 @@ class PILMerger(ImageMerger):
             if not result:
                 result = image
             else:
+                if self.USE_SLOW_BUT_CORRECT_COMPOSITING:
+                    result = self._compose(result, image)
+                else:
                 result.paste(image, None, image)
 
         if result is None:
