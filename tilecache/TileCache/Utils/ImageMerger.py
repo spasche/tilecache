@@ -32,7 +32,10 @@ class ImageMergeMerger(ImageMerger):
                 continue
             images.append(data)
 
-        return (format, image_merge.merge(*images))
+        if not images:
+            return (format, None)
+        else:
+            return (format, image_merge.merge(*images))
 
 class PILMerger(ImageMerger):
     # The default behavior of the PILMerger doesn't use the same composition
