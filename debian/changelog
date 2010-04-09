@@ -1,3 +1,9 @@
+tilecache (r391~c2c2-git20100409) lenny; urgency=low
+
+  * On s3 upload error, display an error message to the console.
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 09 Apr 2010 16:58:07 +0200
+
 tilecache (r391~c2c2-git20100318) lenny; urgency=low
 
   * include http://trac.tilecache.org/changeset/385

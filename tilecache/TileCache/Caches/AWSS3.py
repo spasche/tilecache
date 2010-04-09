@@ -49,12 +49,16 @@ class AWSS3(Cache):
         return data
     
     def setObject(self, key, data, mime_type='application/octet-stream'):
-        boto_key = self.getBotoKey(key)
-        headers = {'Content-Type': mime_type}
-        headers.update(self.cache_control)
-        boto_key.set_contents_from_string(data, headers=headers)
-        boto_key.set_acl(self.policy)
-    
+        try:
+            boto_key = self.getBotoKey(key)
+            headers = {'Content-Type': mime_type}
+            headers.update(self.cache_control)
+            boto_key.set_contents_from_string(data, headers=headers)
+            boto_key.set_acl(self.policy)
+        except Exception, e:
+            print "ERROR: can't save to '%s'"%key
+            raise e
+
     def delete(self, tile):
         if not self.readonly:
             self.deleteObject(self.getKey(tile))
