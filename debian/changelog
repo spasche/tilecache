@@ -1,3 +1,9 @@
+tilecache (r391~c2c2-git20100318) lenny; urgency=low
+
+  * include http://trac.tilecache.org/changeset/385
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Thu, 18 Mar 2010 11:11:50 +0100
+
 tilecache (r391~c2c2-git20100203) lenny; urgency=low
 
   * ImageMergeMerger: don't crash if all the image to merge are empty.
