@@ -1,6 +1,5 @@
 # BSD Licensed, Copyright (c) 2006-2008 MetaCarta, Inc.
 
-import time
 from boto import s3
 from TileCache.Cache import Cache
 
