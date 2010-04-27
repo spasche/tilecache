@@ -1,3 +1,10 @@
+tilecache (r391~c2c2-git20100427) lenny; urgency=low
+
+  * remove the lock system for s3
+  * whichShapes returns MS_DONE when the extent and shapefile don't overlap
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Tue, 27 Apr 2010 11:18:09 +0200
+
 tilecache (r391~c2c2-git20100409) lenny; urgency=low
 
   * On s3 upload error, display an error message to the console.

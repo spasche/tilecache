@@ -27,18 +27,25 @@ def vector_shapes(layerObj, extent=None):
 
     layerObj.open()
     status = layerObj.whichShapes(extent)
-    if status != mapscript.MS_SUCCESS:
+    if status == mapscript.MS_SUCCESS:
+        shapes = []
+        shape = layerObj.nextShape()
+        while shape:
+            shapes.append(shape)
+            shape = layerObj.nextShape()
         layerObj.close()
+        return shapes
+
+    elif status == mapscript.MS_FAILURE:
         raise mapscript.MapServerError("error while querying layer: '%s'"%layerObj.name)
 
-    shapes = []
-    shape = layerObj.nextShape()
-    while shape:
-        shapes.append(shape)
-        shape = layerObj.nextShape()
-    layerObj.close()
-
-    return shapes
+    elif status == mapscript.MS_DONE:
+        # extent and shapefile don't overlap
+        layerObj.close()
+        return []
+    
+    else:
+        raise mapscript.MapServerError("unknown status returned by whichShapes: '%s'"%status)
 
 def raster_shapes(layerObj, extent=None):
     if layerObj.tileindex is None:
