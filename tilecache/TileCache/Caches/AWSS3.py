@@ -66,17 +66,11 @@ class AWSS3(Cache):
     def deleteObject(self, key):
         self.getBotoKey(key).delete()
             
-    def getLockName (self, tile):
-        return "lock-%s" % self.getKey(tile)
+    def attemptLock(self, tile):
+        return True
     
-    def attemptLock (self, tile):
-        data = self.getObject(self.getLockName(tile))
-        if not data:
-            self.setObject(self.getLockName(tile), str(time.time() + self.timeout))
-            return True
-    
-    def unlock (self, tile):
-        self.deleteObject( self.getLockName(tile) )
+    def unlock(self, tile):
+        pass
     
     def keys (self, options = {}):
         prefix = "" 
