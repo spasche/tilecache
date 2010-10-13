@@ -52,8 +52,7 @@ class AWSS3(Cache):
             boto_key = self.getBotoKey(key)
             headers = {'Content-Type': mime_type}
             headers.update(self.cache_control)
-            boto_key.set_contents_from_string(data, headers=headers)
-            boto_key.set_acl(self.policy)
+            boto_key.set_contents_from_string(data, headers=headers, policy=self.policy)
         except Exception, e:
             print "ERROR: can't save to '%s'"%key
             raise e
