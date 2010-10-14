@@ -66,7 +66,10 @@ class PILMerger(ImageMerger):
             a1 = p1[3] / 255.0
             a2 = p2[3] / 255.0
             a = a1 + a2 * (1.0 - a1)
-            m = sys.maxint if a == 0 else 1. / a
+            if a == 0:
+                m = sys.maxint
+            else:
+                m = 1. / a
             r = [int((v1 * a1 + v2 * a2 * (1.0 - a1)) * m) for (v1, v2) in zip(p1[:3], p2[:3])]
             r.append(int(a * 255))
             r = tuple(r)
