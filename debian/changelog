@@ -1,3 +1,9 @@
+tilecache (r391~c2c2-git20101016) lenny; urgency=low
+
+  * HTTP cache: referer support
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 15 Oct 2010 10:37:49 +0200
+
 tilecache (r391~c2c2-git20101015) lenny; urgency=low
 
   * new HTTP cache type
