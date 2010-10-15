@@ -1,3 +1,9 @@
+tilecache (r391~c2c2-git20101015) lenny; urgency=low
+
+  * new HTTP cache type
+
+ -- Frederic Junod <frederic.junod@camptocamp.com>  Fri, 15 Oct 2010 09:39:18 +0200
+
 tilecache (r391~c2c2-git20100427) lenny; urgency=low
 
   * remove the lock system for s3
