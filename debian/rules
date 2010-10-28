@@ -56,7 +56,7 @@ binary-indep: build install
 	dh_compress
 	dh_fixperms
 	dh_pysupport
-	if [ ! -d $(PREFIX)$(PYSUPPORT) ]; then PYMODULE=$(PYSHARED); else PYMODULE=$(PYSUPPORT) fi
+	if [ ! -d $(PREFIX)$(PYSUPPORT) ]; then PYMODULE=$(PYSHARED); else PYMODULE=$(PYSUPPORT); fi
 	chmod +x $(PREFIX)$PYMODULE/TileCache/Service.py
 	chmod +x $(PREFIX)$PYMODULE/TileCache/Client.py
 	dh_installdeb
