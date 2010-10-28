@@ -1,3 +1,7 @@
 *.pyc
 *.dsc
 *.tar.gz
+TileCache.egg-info
+build
+dist
+
