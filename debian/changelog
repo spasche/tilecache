@@ -1,3 +1,9 @@
+tilecache (r391~c2c) lenny; urgency=low
+
+  * Add multi-porjection support in features aware mode.
+
+ -- Stéphane Brunner <stephane.brunner@camptocamp.com>  Wed, 27 Oct 2010 16:46:21 +0200
+
 tilecache (r391~c2c2-git20101016) lenny; urgency=low
 
   * HTTP cache: referer support

@@ -32,6 +32,10 @@ def main():
     parser.add_option("-a", "--all", action="store_false", dest="skip_empty", default = True,
                       help="Generate all the tiles, the default is to skip the empty tiles if the "+
                       "layer is a vector and mapserver layer.")
+    parser.add_option("", "--data-projection", action="store", type="string", dest="dataProjectionString", default=None,
+                      help="Proj4 string to force the data projection.")
+    parser.add_option("", "--tiles-projection", action="store", type="string", dest="tilesProjectionString", default=None,
+                      help="Proj4 string to force the tiles projection.")
 
     (options, args) = parser.parse_args()
 
@@ -55,10 +59,16 @@ def main():
         # not level given, generate all
         levels = None            
 
+    if len(args) == 0:
+        parser.print_help()
+        sys.exit(-1)
+
     for key in fnmatch.filter(svc.layers.keys(), args[0]):
         seed(svc, svc.layers[key], levels=levels, bbox=bboxlist,
              skip_empty=options.skip_empty, padding=options.padding,
-             force = options.force, reverse = options.reverse)
+             force = options.force, reverse = options.reverse,
+             dataProjectionString = options.dataProjectionString,
+             tilesProjectionString = options.tilesProjectionString)
         
     svc.teardown()
                 

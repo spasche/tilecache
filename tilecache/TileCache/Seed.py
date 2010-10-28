@@ -4,7 +4,8 @@ from TileCache.Utils.MapScript import getLayersByName, tiles
 from TileCache.Layers.MapServer import MapServer
 from TileCache.Layer import Tile
 
-def seed(service, layer, levels=None, bbox=None, skip_empty=True, padding=0, force=False, reverse=False):
+def seed(service, layer, levels=None, bbox=None, skip_empty=True, padding=0, force=False, reverse=False, 
+        dataProjectionString=None, tilesProjectionString=None): 
     if levels is None:
         levels = (0, len(layer.resolutions))
     else:
@@ -21,7 +22,8 @@ def seed(service, layer, levels=None, bbox=None, skip_empty=True, padding=0, for
             layersObj.extend(getLayersByName(layer.mapObj, layerName))
 
         # metaSize, reverse, padding not managed
-        for layerObj, shapeObj, x, y, z in tiles(layersObj, layer, bbox, levels):
+        for layerObj, shapeObj, x, y, z in tiles(layersObj, layer, bbox, levels, 
+                dataProjectionString=dataProjectionString, tilesProjectionString=tilesProjectionString):
             start = time.time()
             tile = Tile(layer, x, y, z)
             service.renderTile(tile, force=force)

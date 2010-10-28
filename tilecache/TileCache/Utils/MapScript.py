@@ -31,6 +31,7 @@ def vector_shapes(layerObj, extent=None):
         shapes = []
         shape = layerObj.nextShape()
         while shape:
+            print shape
             shapes.append(shape)
             shape = layerObj.nextShape()
         layerObj.close()
@@ -81,7 +82,7 @@ def raster_shapes(layerObj, extent=None):
 
 def intersects(shapeObj, rectObj):
     """ return whatever 'shapeObj' and 'rectObj' intersect """
-    rect = mapscript.rectObj(*rectObj)
+    rect = rectObj
     return shapeObj.intersects(rect.toPolygon()) == mapscript.MS_TRUE
 
 def getLayersByName(mapObj, name):
@@ -92,17 +93,52 @@ def getLayersByName(mapObj, name):
             layers.append(layer)
     return layers
 
-def tiles(layersObj, tcLayer, bbox=None, levels=None):
+def projectArray(rect, source, dest):
+    if (source != None and dest != None):
+	reporjected = mapscript.rectObj(rect[0], rect[1], rect[2], rect[3])
+        reporjected.project(source, dest)
+        return [reporjected.minx, reporjected.miny, reporjected.maxx, reporjected.maxy]
+    else:
+        return rect
+
+def projectRect(rect, source, dest):
+    if (source != None and dest != None):
+        reporjected = mapscript.rectObj(rect.minx, rect.miny, rect.maxx, rect.maxy)
+        reporjected.project(source, dest)
+        return reporjected
+    else:
+        return rect
+
+def tiles(layersObj, tcLayer, bbox=None, levels=None, dataProjectionString=None, tilesProjectionString=None):
+    dataProj = None
+    if (dataProjectionString != None):
+        print("Data projection: %s"%dataProjectionString)
+        dataProj = mapscript.projectionObj(dataProjectionString)
+
+    tilesProj = None
+    if (tilesProjectionString != None):
+        print("Tiles projection: %s"%tilesProjectionString)
+        tilesProj = mapscript.projectionObj(tilesProjectionString)
+    elif (tcLayer.srs != None and tcLayer.srs != ""):
+        print("Tiles projection: %s"%tcLayer.srs)
+        tilesProj = mapscript.projectionObj("+init=" + tcLayer.srs.lower())
+
     """ yield all non empty tiles indexes (x, y, z) """
     pad = pack('x')
     done = {}
     for layerObj in layersObj:
-        for shapeObj in shapes(layerObj, bbox):
-            for x, y, z in tcLayer.range(shapeObj.bounds, levels):   # first filter using shapes bbox
+        if (dataProj == None and layerObj.map.getProjection() != ""):
+            print("Data projection: %s"%layerObj.map.getProjection())
+            dataProj = mapscript.projectionObj(layerObj.map.getProjection())
+
+        for shapeObj in shapes(layerObj, projectArray(bbox, tilesProj, dataProj)): # reprojet bbox tiles -> data
+            for x, y, z in tcLayer.range(projectRect(shapeObj.bounds, dataProj, tilesProj), levels):   # first filter using shapes bbox, reprojet bounds data -> tiles
                 key = pack('3i', x, y, z)
                 if key not in done:
                     tile = MetaTile(tcLayer, x, y, z)
                     # FIXME: handle metaSize
-                    if intersects(shapeObj, tile.bufferbounds()):    # second filter using shapes geometry
+                    rect = mapscript.rectObj(*tile.bufferbounds())
+                    if intersects(shapeObj, projectRect(rect, tilesProj, dataProj)):    # second filter using shapes geometry, reprojet bufferbounds tiles -> data
                         done[key] = pad
                         yield layerObj, shapeObj, x, y, z
+
