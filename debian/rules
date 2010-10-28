@@ -39,7 +39,7 @@ install: build
 	ls $(PREFIX)
 	ls $(PREFIX)/usr
 	ls $(PREFIX)/usr/sbin/
-        find $(PREFIX) -name tilecache_install_config.py
+	find $(PREFIX) -name tilecache_install_config.py
 	rm $(PREFIX)/usr/bin/tilecache_install_config.py # only used for eggs
 	mv $(PREFIX)/usr/bin/tilecache.* $(PREFIX)/usr/lib/cgi-bin # .cgi, .fcgi
 	mv $(PREFIX)/usr/bin/tilecache_seed.py $(PREFIX)/usr/sbin/tilecache_seed
