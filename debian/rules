@@ -14,7 +14,7 @@ build-stamp:
 	dh_testdir
 	# Add here commands to compile the package.
 	sed -e 's!tilecache\.cgi!/cgi-bin/tilecache.cgi!' ./index.html > ./cgi-example.html
-	python ./setup.py test 
+	python ./setup.py --prefix=/usr/ test 
 	touch build-stamp
 
 clean:
@@ -36,10 +36,6 @@ install: build
 	python ./setup.py install --debian --no-compile --root=$(PREFIX)
 
 	# eliminates script-not-executable warning from lintian
-	ls $(PREFIX)
-	ls $(PREFIX)/usr
-	ls $(PREFIX)/usr/sbin/
-	find $(PREFIX) -name tilecache_install_config.py
 	rm $(PREFIX)/usr/bin/tilecache_install_config.py # only used for eggs
 	mv $(PREFIX)/usr/bin/tilecache.* $(PREFIX)/usr/lib/cgi-bin # .cgi, .fcgi
 	mv $(PREFIX)/usr/bin/tilecache_seed.py $(PREFIX)/usr/sbin/tilecache_seed
