@@ -6,7 +6,7 @@
 #export DH_VERBOSE=1
 
 PREFIX := debian/tilecache
-DEB_PYTHON_SYSTEM=pysupport
+DEB_PYTHON_SYSTEM := pysupport
 PYSUPPORT := /usr/share/python-support/tilecache
 
 build: build-stamp
