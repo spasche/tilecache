@@ -12,8 +12,9 @@ build: build-stamp
 
 build-stamp:
 	dh_testdir
+        cd tilecache
 	# Add here commands to compile the package.
-	#sed -e 's!tilecache\.cgi!/cgi-bin/tilecache.cgi!' ./index.html > ./cgi-example.html
+	sed -e 's!tilecache\.cgi!/cgi-bin/tilecache.cgi!' ./index.html > ./cgi-example.html
 	python ./setup.py test 
 	touch build-stamp
 
