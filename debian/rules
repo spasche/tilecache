@@ -55,8 +55,8 @@ binary-indep: build install
 	dh_compress
 	dh_fixperms
 	dh_pysupport
-	chmod +x $(PREFIX)/pyshared/TileCache/Service.py
-	chmod +x $(PREFIX)/pyshared/TileCache/Client.py
+	chmod +x $(PREFIX)/usr/share/pyshared/TileCache/Service.py
+	chmod +x $(PREFIX)/usr/share/pyshared/TileCache/Client.py
 	dh_installdeb
 	dh_gencontrol
 	dh_md5sums
