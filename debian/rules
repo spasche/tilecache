@@ -6,7 +6,6 @@
 #export DH_VERBOSE=1
 
 PREFIX := debian/tilecache
-PYSUPPORT := /usr/share/python-support/tilecache
 PYSHARED := /usr/share/pyshared
 
 build: build-stamp
@@ -56,8 +55,6 @@ binary-indep: build install
 	dh_compress
 	dh_fixperms
 	dh_pysupport
-#	if [ -d $(PREFIX)$(PYSUPPORT) ]; then chmod +x $(PREFIX)$(PYSUPPORT)/TileCache/Service.py; else chmod +x $(PREFIX)$(PYSHARED)/TileCache/Service.py; fi
-#	if [ -d $(PREFIX)$(PYSUPPORT) ]; then chmod +x $(PREFIX)$(PYSUPPORT)/TileCache/Client.py; else chmod +x $(PREFIX)$(PYSHARED)/TileCache/Client.py; fi
 	chmod +x $(PREFIX)$(PYSHARED)/TileCache/Service.py;
 	chmod +x $(PREFIX)$(PYSHARED)/TileCache/Client.py;
 	dh_installdeb
