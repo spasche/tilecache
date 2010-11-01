@@ -31,7 +31,6 @@ def vector_shapes(layerObj, extent=None):
         shapes = []
         shape = layerObj.nextShape()
         while shape:
-            print shape
             shapes.append(shape)
             shape = layerObj.nextShape()
         layerObj.close()
