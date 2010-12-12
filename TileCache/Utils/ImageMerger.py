@@ -23,8 +23,6 @@ class ImageMergeMerger(ImageMerger):
         return True
 
     def merge(self, tiles, params):
-        import image_merge
-
         images = []
         for t in tiles:
             (format, data) = self.service.renderTile(t, params.has_key('FORCE'))
@@ -34,8 +32,11 @@ class ImageMergeMerger(ImageMerger):
 
         if not images:
             return (format, None)
-        else:
-            return (format, image_merge.merge(*images))
+
+        import image_merge
+        preserve_colors = self.service.metadata.get(
+            "image_merge_preserve_colors") in ("true", "on", "yes", "1")
+        return (format, image_merge.merge(images, preserve_colors))
 
 class PILMerger(ImageMerger):
     # The default behavior of the PILMerger doesn't use the same composition

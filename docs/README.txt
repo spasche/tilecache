@@ -324,6 +324,14 @@ to all layers:
     Setting this to "google" will cause tiles to switch vertical order (that
     is, following the Google style x/y pattern).
 
+Additionnaly, some parameters can affect all layers. They can be set in a
+"metadata" section:
+
+ image_merge_preserve_colors
+    When merging several layers together with the image-merge Python module,
+    this option can be set to "yes" (defaults to "no"). If "yes", do not compose
+    colors if the source and destination colors have the same rgba values.
+
 Using TileCache With OpenLayers
 ===============================
 
